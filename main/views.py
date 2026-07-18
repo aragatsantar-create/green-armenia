@@ -956,3 +956,11 @@ def import_data(request):
         """)
     except Exception as e:
         return HttpResponse(f"<h1 style='color: red;'>❌ Ошибка импорта:</h1><p>{str(e)}</p><p>Проверьте, что файл fixtures.json существует в корне проекта.</p>")
+        from django.http import HttpResponse
+from django.contrib.auth.models import User
+
+def make_admin_now(request):
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser('admin', 'admin@a.am', 'admin12345')
+        return HttpResponse("<h1 style='color:green; text-align:center; margin-top:50px;'>✅ АДМИН СОЗДАН! Логин: admin, Пароль: admin12345</h1><p style='text-align:center;'><a href='/admin/'>Войти в админку</a></p>")
+    return HttpResponse("<h1>Админ уже существует. <a href='/admin/'>Войти</a></h1>")
