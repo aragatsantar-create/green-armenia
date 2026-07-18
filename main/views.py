@@ -934,3 +934,18 @@ def support(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
+# Временная функция для создания админа
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+
+def create_admin(request):
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser('admin', 'admin@aragatsantar.am', 'admin123')
+        return HttpResponse("""
+            <h1>✅ Админ создан!</h1>
+            <p><strong>Логин:</strong> admin</p>
+            <p><strong>Пароль:</strong> admin123</p>
+            <p><a href='/admin/'>Перейти в админку</a></p>
+            <p style='color: red; margin-top: 30px;'>⚠️ Удалите функцию create_admin из views.py после использования!</p>
+        """)
+    return HttpResponse("Админ уже существует. <a href='/admin/'>Перейти в админку</a>")

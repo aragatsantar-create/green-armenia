@@ -11,6 +11,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('join/', views.join, name='join'),
     path('support/', views.support, name='support'),
+    path('create-admin/', views.create_admin, name='create_admin'),
 ]
 
 # ВАЖНО: Эта строка должна быть в конце файла!
