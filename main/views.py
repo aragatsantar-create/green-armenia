@@ -938,14 +938,31 @@ def support(request):
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-def create_admin(request):
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser('admin', 'admin@aragatsantar.am', 'admin123')
+from django.http import HttpResponse
+from django.core.management import call_command
+
+def import_data(request):
+    try:
+        call_command('loaddata', 'fixtures.json')
         return HttpResponse("""
-            <h1>✅ Админ создан!</h1>
-            <p><strong>Логин:</strong> admin</p>
-            <p><strong>Пароль:</strong> admin123</p>
-            <p><a href='/admin/'>Перейти в админку</a></p>
-            <p style='color: red; margin-top: 30px;'>⚠️ Удалите функцию create_admin из views.py после использования!</p>
+            <h1>✅ Данные успешно импортированы!</h1>
+            <p>Проекты, тексты и контакты перенесены на сервер.</p>
+            <p><a href='/'>Перейти на главную</a> | <a href='/admin/'>В админку</a></p>
+            <p style='color: red; margin-top: 30px;'>⚠️ Удалите функцию import_data из views.py после использования!</p>
         """)
-    return HttpResponse("Админ уже существует. <a href='/admin/'>Перейти в админку</a>")
+    except Exception as e:
+        return HttpResponse(f"<h1>❌ Ошибка:</h1><p>{str(e)}</p>")
+        from django.http import HttpResponse
+from django.core.management import call_command
+
+def import_data(request):
+    try:
+        call_command('loaddata', 'fixtures.json')
+        return HttpResponse("""
+            <h1>✅ Данные успешно импортированы!</h1>
+            <p>Проекты, тексты и контакты перенесены на сервер.</p>
+            <p><a href='/'>Перейти на главную</a> | <a href='/admin/'>В админку</a></p>
+            <p style='color: red; margin-top: 30px;'>⚠️ Удалите функцию import_data из views.py после использования!</p>
+        """)
+    except Exception as e:
+        return HttpResponse(f"<h1>❌ Ошибка:</h1><p>{str(e)}</p>")
