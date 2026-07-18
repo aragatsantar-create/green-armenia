@@ -1,0 +1,193 @@
+# English translations for Aragats Antar
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-16 15:34+0300\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: .\main\forms.py:10 .\main\views.py:340
+msgid "Ваше имя"
+msgstr "Your name"
+
+#: .\main\forms.py:11
+msgid "Email"
+msgstr "Email"
+
+#: .\main\forms.py:12 .\main\views.py:341
+msgid "Телефон"
+msgstr "Phone"
+
+#: .\main\forms.py:13 .\main\views.py:342
+msgid "Сообщение"
+msgstr "Message"
+
+#: .\main\forms.py:18
+msgid "Введите ваше имя"
+msgstr "Enter your name"
+
+#: .\main\forms.py:23
+msgid "Введите ваш email"
+msgstr "Enter your email"
+
+#: .\main\forms.py:28
+msgid "Введите ваш телефон (необязательно)"
+msgstr "Enter your phone (optional)"
+
+#: .\main\forms.py:32
+msgid "Расскажите о себе и почему хотите присоединиться"
+msgstr "Tell us about yourself and why you want to join"
+
+#: .\main\views.py:52
+msgid "Ереван, Армения"
+msgstr "Yerevan, Armenia"
+
+#: .\main\views.py:55
+msgid "Aragats Antar — восстанавливаем леса Армении для будущих поколений."
+msgstr "Aragats Antar — restoring Armenia's forests for future generations."
+
+#: .\main\views.py:114 .\main\views.py:326 .\main\views.py:635
+msgid "Главная"
+msgstr "Home"
+
+#: .\main\views.py:114 .\main\views.py:327 .\main\views.py:635
+msgid "О нас"
+msgstr "About"
+
+#: .\main\views.py:114 .\main\views.py:328 .\main\views.py:635
+msgid "Проекты"
+msgstr "Projects"
+
+#: .\main\views.py:114 .\main\views.py:329 .\main\views.py:635
+msgid "Присоединяйтесь"
+msgstr "Join"
+
+#: .\main\views.py:115
+msgid "Каждое дерево — это шаг к будущему"
+msgstr "Every tree is a step to the future"
+
+#: .\main\views.py:116
+msgid "Как вы можете помочь?"
+msgstr "How can you help?"
+
+#: .\main\views.py:117
+msgid ""
+"Мы масштабируемся и ищем единомышленников. Ваша поддержка критически важна "
+"для сохранения климата Армении."
+msgstr ""
+"We are scaling up and looking for like-minded people. Your support is critical "
+"for preserving Armenia's climate."
+
+#: .\main\views.py:118
+msgid "Поддержать проект"
+msgstr "Support the project"
+
+#: .\main\views.py:119
+msgid "Присоединиться к нам"
+msgstr "Join us"
+
+#: .\main\views.py:120
+msgid "Посажено деревьев"
+msgstr "Trees planted"
+
+#: .\main\views.py:121
+msgid "Пока нет активных проектов, но мы скоро начнем!"
+msgstr "No active projects yet, but we'll start soon!"
+
+#: .\main\views.py:122 .\main\views.py:334
+msgid "О проекте"
+msgstr "About the project"
+
+#: .\main\views.py:122 .\main\views.py:335
+msgid "Контакты"
+msgstr "Contacts"
+
+#: .\main\views.py:312
+msgid ""
+"<strong>Aragats Antar</strong> — это не просто проект по восстановлению "
+"лесов. Это сообщество единомышленников, где каждый может найти своё место и "
+"внести реальный вклад в сохранение климата Армении."
+msgstr ""
+"<strong>Aragats Antar</strong> is not just a forest restoration project. It is "
+"a community of like-minded people where everyone can find their place and make "
+"a real contribution to preserving Armenia's climate."
+
+#: .\main\views.py:314
+msgid ""
+"Мы ищем <strong>агрономов и дендрологов</strong>. Нам нужны "
+"<strong>волонтёры-озеленители</strong>, готовые приехать на субботники, "
+"сажать деревья и ухаживать за саженцами."
+msgstr ""
+"We are looking for <strong>agronomists and dendrologists</strong>. We need "
+"<strong>greening volunteers</strong> ready to come to community workdays, plant "
+"trees, and care for seedlings."
+
+#: .\main\views.py:316
+msgid ""
+"Если вы <strong>SMM-специалист</strong>, мы доверим вам ведение соцсетей и "
+"создание контента. <strong>Копирайтеры</strong> помогут нам писать тексты "
+"для сайта и СМИ. <strong>Контент-мейкеры/фотографы</strong> будут снимать "
+"видео и фотографии, показывая красоту Арагаца и процесс восстановления лесов."
+msgstr ""
+"If you are an <strong>SMM specialist</strong>, we will trust you with managing "
+"our social media and creating content. <strong>Copywriters</strong> will help "
+"us write texts for the website and media. <strong>Content makers/photographers</"
+"strong> will shoot videos and photos showing the beauty of Aragats and the "
+"forest restoration process."
+
+#: .\main\views.py:318
+msgid ""
+"А если у вас есть другие таланты — дизайн, юриспруденция, бухгалтерия, "
+"логистика — мы найдём им применение!"
+msgstr ""
+"And if you have other talents — design, law, accounting, logistics — we will "
+"find a use for them!"
+
+#: .\main\views.py:320
+msgid ""
+"<strong>Что вы получите?</strong> Реальный опыт, новые знакомства, "
+"уникальные фотографии на фоне гор, пополнение портфолио и осознание того, "
+"что вы делаете мир лучше. Каждое посаженное дерево — это ваш личный вклад в "
+"будущее Армении."
+msgstr ""
+"<strong>What will you get?</strong> Real experience, new connections, unique "
+"photos against the backdrop of mountains, portfolio enhancement, and the "
+"realization that you are making the world a better place. Every planted tree "
+"is your personal contribution to the future of Armenia."
+
+#: .\main\views.py:330
+msgid "Присоединиться"
+msgstr "Join"
+
+#: .\main\views.py:331
+msgid "Присоединяйтесь к нам!"
+msgstr "Join us!"
+
+#: .\main\views.py:332
+msgid ""
+"Заполните форму ниже, чтобы стать частью команды Aragats Antar и принять "
+"участие в создании \"зеленого щита\" вокруг Арагаца"
+msgstr ""
+"Fill out the form below to become part of the Aragats Antar team and "
+"participate in creating a \"green shield\" around Aragats."
+
+#: .\main\views.py:333 .\main\views.py:636
+msgid "Вернуться на главную"
+msgstr "Back to Home"
+
+#: .\main\views.py:336
+msgid "Отправить заявку"
+msgstr "Submit application"
+
+#: .\main\views.py:337
+msgid "Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время."
+msgstr ""
+"Thank you! Your application has been received. We will contact you shortly."
+
+#: .\main\views.py:338
+msgid "Кто нам нужен"
+msgstr "Who we need"
+
+#: .\main\views.py:636
+msgid "Раздел 'О нас' пока заполняется..."
+msgstr "The 'About' section is still being filled..."
