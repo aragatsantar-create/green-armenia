@@ -934,10 +934,9 @@ def support(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
-# Временная функция для создания админа
-from django.http import HttpResponse
-from django.contrib.auth.models import User
-
+# =========================================================
+# ВРЕМЕННАЯ ФУНКЦИЯ ДЛЯ ИМПОРТА ДАННЫХ (УДАЛИТЬ ПОСЛЕ ИСПОЛЬЗОВАНИЯ)
+# =========================================================
 from django.http import HttpResponse
 from django.core.management import call_command
 
@@ -945,24 +944,15 @@ def import_data(request):
     try:
         call_command('loaddata', 'fixtures.json')
         return HttpResponse("""
-            <h1>✅ Данные успешно импортированы!</h1>
-            <p>Проекты, тексты и контакты перенесены на сервер.</p>
-            <p><a href='/'>Перейти на главную</a> | <a href='/admin/'>В админку</a></p>
-            <p style='color: red; margin-top: 30px;'>⚠️ Удалите функцию import_data из views.py после использования!</p>
+            <h1 style="color: green; text-align: center; margin-top: 50px;">✅ Данные успешно импортированы!</h1>
+            <p style="text-align: center;">Проекты, тексты и контакты перенесены на сервер.</p>
+            <p style="text-align: center;">
+                <a href="/" style="color: blue; margin: 10px;">Перейти на главную</a> | 
+                <a href="/admin/" style="color: blue; margin: 10px;">В админку</a>
+            </p>
+            <p style="color: red; text-align: center; margin-top: 50px; font-weight: bold;">
+                ⚠️ ВАЖНО: Удалите функцию import_data из views.py и маршрут из urls.py после использования!
+            </p>
         """)
     except Exception as e:
-        return HttpResponse(f"<h1>❌ Ошибка:</h1><p>{str(e)}</p>")
-        from django.http import HttpResponse
-from django.core.management import call_command
-
-def import_data(request):
-    try:
-        call_command('loaddata', 'fixtures.json')
-        return HttpResponse("""
-            <h1>✅ Данные успешно импортированы!</h1>
-            <p>Проекты, тексты и контакты перенесены на сервер.</p>
-            <p><a href='/'>Перейти на главную</a> | <a href='/admin/'>В админку</a></p>
-            <p style='color: red; margin-top: 30px;'>⚠️ Удалите функцию import_data из views.py после использования!</p>
-        """)
-    except Exception as e:
-        return HttpResponse(f"<h1>❌ Ошибка:</h1><p>{str(e)}</p>")
+        return HttpResponse(f"<h1 style='color: red;'>❌ Ошибка импорта:</h1><p>{str(e)}</p><p>Проверьте, что файл fixtures.json существует в корне проекта.</p>")
