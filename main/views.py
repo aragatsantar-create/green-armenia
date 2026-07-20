@@ -34,7 +34,7 @@ def get_nav_links(current_page, t):
         (t['home'], "/"),
         (t['about'], "/about/"),
         (t['projects'], "/#projects"),
-        (t['support'], "/support/"),  # <-- Добавили поддержку
+        (t['support'], "/support/"),
         (t['join'], "/join/"),
     ]
     nav_html = ""
@@ -129,20 +129,17 @@ def home(request):
     
     for project in projects:
         images = project.images.all()
-        # Безопасное получение картинки
-        image_html = ""
-        if page.image:
-            try:
-                image_html = f'<img src="{page.image.url}" alt="{page.title}" style="max-width: 100%; height: auto; border-radius: 10px; margin: 2em 0;">'
-            except ValueError:
-                # Если файл физически отсутствует на сервере, просто не выводим картинку
-                image_html = ""
-            for idx, img in enumerate(images):
-                slides_html += f'<div class="swiper-slide"><img src="{img.image.url}" alt="{project.title}" onclick="openLightbox(\'{img.image.url}\', {idx}, \'project-{project.id}\')"></div>'
-            if len(images) > 1:
-                image_html = f'<div class="swiper project-swiper" id="project-{project.id}"><div class="swiper-wrapper">{slides_html}</div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div><div class="swiper-pagination"></div></div>'
-            else:
-                image_html = f'<div class="project-image">{slides_html}</div>'
+        slides_html = ""
+        for idx, img in enumerate(images):
+            slides_html += f'<div class="swiper-slide"><img src="{img.image.url}" alt="{project.title}" onclick="openLightbox(\'{img.image.url}\', {idx}, \'project-{project.id}\')"></div>'
+        
+        if len(images) > 1:
+            image_html = f'<div class="swiper project-swiper" id="project-{project.id}"><div class="swiper-wrapper">{slides_html}</div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div><div class="swiper-pagination"></div></div>'
+        elif len(images) == 1:
+            image_html = f'<div class="project-image">{slides_html}</div>'
+        else:
+            image_html = ""
+            
         projects_html += f'<div class="project-card">{image_html}<div class="project-content"><h3>{project.title} <span style="font-size:0.8em; color:#666;">({project.year})</span></h3><p>{project.description}</p><div class="stat-badge"> {t["trees_planted"]}: {project.trees_planted}</div></div></div>'
     
     if not projects:
@@ -255,11 +252,11 @@ def home(request):
             {projects_html}
             <h2 class="section-title" style="margin-top: 80px;">{t['how_to_help']}</h2>
             <p style="font-size: 1.2em; text-align: center; max-width: 700px; margin: 0 auto 40px;">{t['support_message']}</p>
-<div class="btn-group">
-    <a href="/support/" class="btn btn-primary">{t['support_project']}</a>
-    <span class="btn-divider"></span>
-    <a href="/join/" class="btn btn-secondary">{t['join_us']}</a>
-</div>
+            <div class="btn-group">
+                <a href="/support/" class="btn btn-primary">{t['support_project']}</a>
+                <span class="btn-divider"></span>
+                <a href="/join/" class="btn btn-secondary">{t['join_us']}</a>
+            </div>
         </div>
         <div class="lightbox" id="lightbox">
             <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
@@ -480,6 +477,7 @@ def join(request):
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
 
+
 def about(request):
     lang = request.COOKIES.get('django_language', 'ru')
     if lang not in ['ru', 'en', 'hy']:
@@ -487,12 +485,12 @@ def about(request):
     activate(lang)
     
     page = AboutPage.objects.first()
-      t = {
+    t = {
         'home': _("Главная"), 
         'about': _("О нас"), 
         'projects': _("Проекты"), 
         'join': _("Присоединяйтесь"),
-        'support': _("Поддержать"),  # <--- ДОБАВЬТЕ ЭТУ СТРОКУ!
+        'support': _("Поддержать"),
         'back_home': _("Вернуться на главную"), 
         'about_filling': _("Раздел 'О нас' пока заполняется... Мы добавляем историю нашей организации."),
     }
@@ -508,20 +506,17 @@ def about(request):
     else:
         page_title = page.title if page.title else t['about']
         
-        # 1. БЕЗОПАСНАЯ обработка текста (защита от пустого поля None)
         if page.content:
             paragraphs = str(page.content).split('\n\n')
             text = "".join([f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()])
         else:
             text = f"<p>{t['about_filling']}</p>"
             
-        # 2. БЕЗОПАСНАЯ обработка картинки (защита от отсутствующего файла на сервере)
         image_html = ""
         if page.image:
             try:
                 image_html = f'<div class="about-image"><img src="{page.image.url}" alt="{page_title}"></div>'
             except ValueError:
-                # Если файла физически нет на диске Render, просто не показываем картинку, чтобы сайт не падал
                 image_html = ""
         
     html = f"""
@@ -594,6 +589,8 @@ def about(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
+
+
 def support(request):
     lang = request.COOKIES.get('django_language', 'ru')
     if lang not in ['ru', 'en', 'hy']:
@@ -632,7 +629,6 @@ def support(request):
     lang_switcher = get_language_switcher(lang)
     footer_html = get_footer_html(lang)
 
-    # Donorbox (заглушка пока нет регистрации)
     donorbox_embed = """
     <div class="payment-placeholder">
         <div class="placeholder-icon">💳</div>
@@ -645,7 +641,6 @@ def support(request):
     </div>
     """
 
-    # QR-коды (заглушки)
     qr_sbp = """
     <div class="qr-placeholder">
         <div class="qr-icon">📱</div>
@@ -703,7 +698,6 @@ def support(request):
 
             .support-container {{ max-width: 1100px; margin: -40px auto 60px; padding: 0 20px; position: relative; z-index: 10; }}
             
-            /* СЕТКА ПЛАТЕЖНЫХ МЕТОДОВ */
             .payment-methods {{
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -732,22 +726,9 @@ def support(request):
                 background: linear-gradient(135deg, #E0F2F1 0%, white 100%);
             }}
             
-            .payment-icon {{
-                font-size: 3em;
-                margin-bottom: 15px;
-            }}
-            
-            .payment-card h3 {{
-                color: var(--brand);
-                margin: 0 0 10px;
-                font-size: 1.3em;
-            }}
-            
-            .payment-card p {{
-                color: #666;
-                font-size: 0.95em;
-                margin: 0 0 20px;
-            }}
+            .payment-icon {{ font-size: 3em; margin-bottom: 15px; }}
+            .payment-card h3 {{ color: var(--brand); margin: 0 0 10px; font-size: 1.3em; }}
+            .payment-card p {{ color: #666; font-size: 0.95em; margin: 0 0 20px; }}
             
             .status-badge {{
                 display: inline-block;
@@ -758,114 +739,41 @@ def support(request):
                 font-size: 0.85em;
                 font-weight: 600;
             }}
+            .status-badge.small {{ padding: 4px 10px; font-size: 0.8em; }}
             
-            .status-badge.small {{
-                padding: 4px 10px;
-                font-size: 0.8em;
-            }}
-            
-            /* ЗАГУШКИ ДЛЯ QR */
             .qr-placeholder {{
-                width: 180px;
-                height: 180px;
-                background: #F5F5F5;
-                border: 2px dashed #ccc;
-                border-radius: 12px;
-                margin: 0 auto 15px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                color: #999;
+                width: 180px; height: 180px; background: #F5F5F5; border: 2px dashed #ccc;
+                border-radius: 12px; margin: 0 auto 15px; display: flex; flex-direction: column;
+                align-items: center; justify-content: center; color: #999;
             }}
+            .qr-icon {{ font-size: 3em; margin-bottom: 10px; }}
+            .payment-placeholder {{ padding: 40px 20px; text-align: center; }}
+            .placeholder-icon {{ font-size: 4em; margin-bottom: 15px; }}
             
-            .qr-icon {{
-                font-size: 3em;
-                margin-bottom: 10px;
-            }}
-            
-            /* ЗАГУШКА ДЛЯ DONORBOX */
-            .payment-placeholder {{
-                padding: 40px 20px;
-                text-align: center;
-            }}
-            
-            .placeholder-icon {{
-                font-size: 4em;
-                margin-bottom: 15px;
-            }}
-            
-            /* БАНКОВСКИЕ РЕКВИЗИТЫ */
             .corporate-section {{
-                background: white;
-                border-radius: 16px;
-                padding: 40px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-                border-left: 5px solid var(--brand);
+                background: white; border-radius: 16px; padding: 40px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-left: 5px solid var(--brand);
             }}
-            
-            .corporate-section h2 {{
-                color: var(--brand);
-                margin-top: 0;
-            }}
-            
+            .corporate-section h2 {{ color: var(--brand); margin-top: 0; }}
             .bank-details {{
-                background: #F4F8F8;
-                padding: 25px;
-                border-radius: 8px;
-                margin: 20px 0;
-                font-family: 'Courier New', monospace;
-                font-size: 0.95em;
-                color: #333;
+                background: #F4F8F8; padding: 25px; border-radius: 8px; margin: 20px 0;
+                font-family: 'Courier New', monospace; font-size: 0.95em; color: #333;
             }}
-            
-            .bank-details div {{
-                margin-bottom: 12px;
-                padding-bottom: 12px;
-                border-bottom: 1px solid #ddd;
-            }}
-            
-            .bank-details div:last-child {{
-                border-bottom: none;
-                margin-bottom: 0;
-            }}
-            
-            .bank-details strong {{
-                color: var(--brand);
-                display: inline-block;
-                min-width: 150px;
-            }}
+            .bank-details div {{ margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd; }}
+            .bank-details div:last-child {{ border-bottom: none; margin-bottom: 0; }}
+            .bank-details strong {{ color: var(--brand); display: inline-block; min-width: 150px; }}
             
             .btn-primary {{
-                display: inline-block;
-                background-color: var(--brand);
-                color: white;
-                padding: 14px 30px;
-                border-radius: 8px;
-                text-decoration: none;
-                font-weight: bold;
-                margin-top: 20px;
-                transition: all 0.3s;
+                display: inline-block; background-color: var(--brand); color: white;
+                padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold;
+                margin-top: 20px; transition: all 0.3s;
             }}
+            .btn-primary:hover {{ background-color: #0a5c59; transform: translateY(-2px); }}
             
-            .btn-primary:hover {{
-                background-color: #0a5c59;
-                transform: translateY(-2px);
-            }}
-            
-            /* АДАПТИВНОСТЬ */
             @media (max-width: 768px) {{
-                .payment-methods {{
-                    grid-template-columns: 1fr;
-                }}
-                .support-hero h1 {{
-                    font-size: 2em;
-                }}
-                .bank-details strong {{
-                    display: block;
-                    min-width: auto;
-                    margin-bottom: 5px;
-                }}
+                .payment-methods {{ grid-template-columns: 1fr; }}
+                .support-hero h1 {{ font-size: 2em; }}
+                .bank-details strong {{ display: block; min-width: auto; margin-bottom: 5px; }}
             }}
             
             .main-footer {{ background: #1a1a1a; color: #ccc; padding: 60px 20px 0; margin-top: 80px; }}
@@ -898,17 +806,13 @@ def support(request):
         </div>
 
         <div class="support-container">
-            <!-- СЕТКА ПЛАТЕЖНЫХ МЕТОДОВ -->
             <div class="payment-methods">
-                <!-- 1. Международные карты -->
                 <div class="payment-card featured">
                     <div class="payment-icon">💳</div>
                     <h3>{t['method_cards']}</h3>
                     <p>{t['method_cards_desc']}</p>
                     {donorbox_embed}
                 </div>
-                
-                <!-- 2. Карта Мир / СБП -->
                 <div class="payment-card">
                     <div class="payment-icon">🇷🇺</div>
                     <h3>{t['method_mir']}</h3>
@@ -916,8 +820,6 @@ def support(request):
                     {qr_sbp}
                     <div class="status-badge">🔜 {t['coming_soon']}</div>
                 </div>
-                
-                <!-- 3. Idram -->
                 <div class="payment-card">
                     <div class="payment-icon">🇦🇲</div>
                     <h3>{t['method_idram']}</h3>
@@ -925,8 +827,6 @@ def support(request):
                     {qr_idram}
                     <div class="status-badge">🔜 {t['coming_soon']}</div>
                 </div>
-                
-                <!-- 4. Криптовалюта -->
                 <div class="payment-card">
                     <div class="payment-icon"></div>
                     <h3>{t['method_crypto']}</h3>
@@ -936,7 +836,6 @@ def support(request):
                 </div>
             </div>
 
-            <!-- КОРПОРАТИВНЫМ ПАРТНЕРАМ -->
             <div class="corporate-section">
                 <h2>{t['corporate_title']}</h2>
                 <p>{t['corporate_desc']}</p>
@@ -959,10 +858,11 @@ def support(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
+
+
 # =========================================================
 # ВРЕМЕННАЯ ФУНКЦИЯ ДЛЯ ИМПОРТА ДАННЫХ (УДАЛИТЬ ПОСЛЕ ИСПОЛЬЗОВАНИЯ)
 # =========================================================
-from django.http import HttpResponse
 from django.core.management import call_command
 
 def import_data(request):
@@ -981,7 +881,8 @@ def import_data(request):
         """)
     except Exception as e:
         return HttpResponse(f"<h1 style='color: red;'>❌ Ошибка импорта:</h1><p>{str(e)}</p><p>Проверьте, что файл fixtures.json существует в корне проекта.</p>")
-        from django.http import HttpResponse
+
+
 from django.contrib.auth.models import User
 
 def make_admin_now(request):
