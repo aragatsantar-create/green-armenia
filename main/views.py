@@ -489,7 +489,7 @@ def about(request):
     page = AboutPage.objects.first()
     t = {
         'home': _("Главная"), 'about': _("О нас"), 'projects': _("Проекты"), 'join': _("Присоединяйтесь"),
-        'back_home': _("Вернуться на главную"), 'about_filling': _("Раздел 'О нас' пока заполняется..."),
+        'back_home': _("Вернуться на главную"), 'about_filling': _("Раздел 'О нас' пока заполняется... Мы добавляем историю нашей организации."),
     }
 
     nav_links = get_nav_links(t['about'], t)
@@ -499,10 +499,25 @@ def about(request):
     if not page:
         text = f"<p>{t['about_filling']}</p>"
         image_html = ""
+        page_title = t['about']
     else:
-        paragraphs = page.content.split('\n\n')
-        text = "".join([f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()])
-        image_html = f'<div class="about-image"><img src="{page.image.url}" alt="{page.title}"></div>' if page.image else ""
+        page_title = page.title if page.title else t['about']
+        
+        # 1. БЕЗОПАСНАЯ обработка текста (защита от пустого поля None)
+        if page.content:
+            paragraphs = str(page.content).split('\n\n')
+            text = "".join([f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()])
+        else:
+            text = f"<p>{t['about_filling']}</p>"
+            
+        # 2. БЕЗОПАСНАЯ обработка картинки (защита от отсутствующего файла на сервере)
+        image_html = ""
+        if page.image:
+            try:
+                image_html = f'<div class="about-image"><img src="{page.image.url}" alt="{page_title}"></div>'
+            except ValueError:
+                # Если файла физически нет на диске Render, просто не показываем картинку, чтобы сайт не падал
+                image_html = ""
         
     html = f"""
     <!DOCTYPE html>
@@ -510,7 +525,7 @@ def about(request):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{page.title if page else t['about']} - {BRAND_NAME}</title>
+        <title>{page_title} - {BRAND_NAME}</title>
         <style>
             :root {{ --brand: {BRAND_COLOR}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.7; }}
@@ -562,7 +577,7 @@ def about(request):
             </div>
         </header>
         <div class="about-container">
-            <h1 class="page-title">{page.title if page else t['about']}</h1>
+            <h1 class="page-title">{page_title}</h1>
             {image_html}
             <div class="story-content">{text}</div>
             <a href="/" class="back-btn"><span>←</span> {t['back_home']}</a>

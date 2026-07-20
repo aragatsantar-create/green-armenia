@@ -14,7 +14,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0h0brem7sc9#s6@p^2-&$
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # На Render мы установим DEBUG=False через переменные окружения
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+# Временно для поиска ошибки:
+DEBUG = True 
 
 # Разрешаем наш будущий домен и временные ссылки Render
 ALLOWED_HOSTS = [
