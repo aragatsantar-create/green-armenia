@@ -129,9 +129,14 @@ def home(request):
     
     for project in projects:
         images = project.images.all()
+        # Безопасное получение картинки
         image_html = ""
-        if images:
-            slides_html = ""
+        if page.image:
+            try:
+                image_html = f'<img src="{page.image.url}" alt="{page.title}" style="max-width: 100%; height: auto; border-radius: 10px; margin: 2em 0;">'
+            except ValueError:
+                # Если файл физически отсутствует на сервере, просто не выводим картинку
+                image_html = ""
             for idx, img in enumerate(images):
                 slides_html += f'<div class="swiper-slide"><img src="{img.image.url}" alt="{project.title}" onclick="openLightbox(\'{img.image.url}\', {idx}, \'project-{project.id}\')"></div>'
             if len(images) > 1:
