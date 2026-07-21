@@ -130,12 +130,11 @@ STORAGES = {
     },
 }
 
-# !!! ВАЖНО: Эта строка "обманывает" старый пакет cloudinary_storage, 
-# чтобы он не искал удаленную настройку и не ломал сборку.
-# Она говорит использовать WhiteNoise для статики, а не Cloudinary.
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# !!! МАГИЧЕСКАЯ СТРОКА: Говорит WhiteNoise игнорировать отсутствующие иконки админки
+WHITENOISE_MANIFEST_STRICT = False
 
-# Также добавим это для полной совместимости
+# Совместимость для старых пакетов
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
