@@ -25,7 +25,6 @@ ALLOWED_HOSTS = ['aragats-antar.onrender.com', 'localhost', '127.0.0.1', '.onren
 # Application definition
 INSTALLED_APPS = [
     'cloudinary',
-    'cloudinary_storage',
     'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -117,7 +116,7 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Современные настройки хранилищ для Django 4.2+
+# Современные настройки хранилищ (Django 4.2+)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -126,11 +125,6 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
-# ВАЖНО: Эти две строки ОБЯЗАТЕЛЬНЫ, иначе старая библиотека django-cloudinary-storage 
-# выдает ошибку AttributeError при collectstatic.
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
