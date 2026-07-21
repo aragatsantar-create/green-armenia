@@ -106,8 +106,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'main', 'static'),
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Настройки для WhiteNoise и Cloudinary (Современный формат для Django 4.2+)
+# Настройки Cloudinary (Обязательно перед STORAGES)
+import cloudinary
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
+)
+
+# Современная настройка хранилищ для Django 4.2+
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -117,8 +126,7 @@ STORAGES = {
     },
 }
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-MEDIA_URL = '/media/'  # Cloudinary сам подменит этот путь на облачную ссылку при отдаче
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
