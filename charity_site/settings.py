@@ -20,6 +20,8 @@ ALLOWED_HOSTS = ['aragats-antar.onrender.com', 'localhost', '127.0.0.1', '.onren
 
 # Application definition
 INSTALLED_APPS = [
+    'cloudinary',
+    'cloudinary_storage',
     'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main', 
+
 ]
 
 MIDDLEWARE = [
@@ -106,8 +109,19 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (загруженные пользователями изображения)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+   # Настройки Cloudinary для медиа-файлов
+   import cloudinary
+   import cloudinary.uploader
+   import cloudinary.api
+
+   cloudinary.config(
+       cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+       api_key=os.environ.get('CLOUDINARY_API_KEY'),
+       api_secret=os.environ.get('CLOUDINARY_API_SECRET')
+   )
+
+   MEDIA_URL = '/media/'
+   DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
