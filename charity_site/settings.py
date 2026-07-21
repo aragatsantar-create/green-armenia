@@ -4,28 +4,19 @@ Django settings for charity_site project.
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# В будущем лучше вынести это в переменные окружения на Render
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0h0brem7sc9#s6@p^2-&$#lv#o#n0k#sd$72(yoslq67p!p%&i')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# На Render мы установим DEBUG=False через переменные окружения
-# Временно для поиска ошибки:
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-# Разрешаем наш будущий домен и временные ссылки Render
-ALLOWED_HOSTS = [
-    'aragatsantar.org',
-    'www.aragatsantar.org',
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME', '127.0.0.1'), 
-    'localhost',
-    '127.0.0.1'
-]
+# Разрешаем наш домен и локальные адреса
+ALLOWED_HOSTS = ['aragats-antar.onrender.com', 'localhost', '127.0.0.1', '.onrender.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -41,9 +32,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- СТРОГО ВТОРАЯ СТРОКА!
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',    # <-- Теперь 4-я строка, это правильно
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -71,13 +62,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'charity_site.wsgi.application'
 
-# Database
-import dj_database_url
-
+# Database (PostgreSQL)
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
     )
 }
 
