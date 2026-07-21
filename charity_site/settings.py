@@ -105,10 +105,9 @@ LOCALE_PATHS = [
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
-# Используем чистый pathlib (BASE_DIR уже является объектом Path)
-STATICFILES_DIRS = [
-    BASE_DIR / 'main' / 'static',
-]
+# ВАЖНО: Мы УДАЛИЛИ STATICFILES_DIRS. 
+# Так как 'main' есть в INSTALLED_APPS, Django САМ найдет папку main/static.
+# Это полностью устраняет ошибку "skipped due to conflict"!
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Настройки Cloudinary
@@ -119,17 +118,16 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
+# Используем стандартное хранилище Django (без сжатия, чтобы избежать багов Python 3.14)
+# WhiteNoise Middleware всё равно будет эффективно отдавать эти файлы.
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.StaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
-STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
