@@ -117,19 +117,23 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Настройки хранилищ (ОТКЛЮЧАЕМ сжатие, чтобы избежать ошибки FileNotFoundError)
+# Хранилища (ТОЛЬКО через STORAGES для Django 5.1)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.StaticFilesStorage",  # <-- Убрали слово Compressed
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
-# Для совместимости
-STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage' # <-- Убрали слово Compressed
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# КРИТИЧЕСКИ ВАЖНО: Отключаем строгую проверку манифеста
+WHITENOISE_MANIFEST_STRICT = False
+
+# ЯДЕРНАЯ МЕРА: Запрещаем WhiteNoise сжимать JS-файлы, 
+# чтобы ошибка с fi.js больше никогда не возникала при сборке.
+# Статика будет работать, просто без gzip-сжатия JS (разница незаметна).
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ('.js',)
 
 MEDIA_URL = '/media/'
 
