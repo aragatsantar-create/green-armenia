@@ -117,7 +117,7 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Хранилища (ТОЛЬКО через STORAGES для Django 5.1)
+# Современные настройки хранилищ (Django 4.2+)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -127,13 +127,12 @@ STORAGES = {
     },
 }
 
-# КРИТИЧЕСКИ ВАЖНО: Отключаем строгую проверку манифеста
-WHITENOISE_MANIFEST_STRICT = False
+# КРИТИЧЕСКИ ВАЖНО: Оставляем эту переменную специально для старой библиотеки 
+# django-cloudinary-storage, иначе она выдает AttributeError при collectstatic.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# ЯДЕРНАЯ МЕРА: Запрещаем WhiteNoise сжимать JS-файлы, 
-# чтобы ошибка с fi.js больше никогда не возникала при сборке.
-# Статика будет работать, просто без gzip-сжатия JS (разница незаметна).
-WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ('.js',)
+# Отключаем строгую проверку манифеста, чтобы избежать ошибок с missing files (icon-debug.svg)
+WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = '/media/'
 
