@@ -103,8 +103,11 @@ LOCALE_PATHS = [
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+
+# Явно указываем на папку static в корне проекта. 
+# Это единственный источник файлов, конфликтов быть не может.
 STATICFILES_DIRS = [
-    BASE_DIR / 'main' / 'static',
+    BASE_DIR / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -116,7 +119,7 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Современные настройки хранилищ (Django 4.2+)
+# Современные настройки хранилищ
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
