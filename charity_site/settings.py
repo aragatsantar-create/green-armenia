@@ -4,6 +4,9 @@ Django settings for charity_site project.
 
 from pathlib import Path
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -104,24 +107,18 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'main', 'static'),
 ]
 
-# Настройки для WhiteNoise (ОБЯЗАТЕЛЬНО для продакшена)
+# Настройки для WhiteNoise и Cloudinary (Современный формат для Django 4.2+)
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Media files (загруженные пользователями изображения)
-   # Настройки Cloudinary для медиа-файлов
-   import cloudinary
-   import cloudinary.uploader
-   import cloudinary.api
-
-   cloudinary.config(
-       cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-       api_key=os.environ.get('CLOUDINARY_API_KEY'),
-       api_secret=os.environ.get('CLOUDINARY_API_SECRET')
-   )
-
-   MEDIA_URL = '/media/'
-   DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'  # Cloudinary сам подменит этот путь на облачную ссылку при отдаче
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
