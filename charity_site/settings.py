@@ -109,6 +109,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Настройки WhiteNoise (ОБЯЗАТЕЛЬНО в этом порядке)
+WHITENOISE_MANIFEST_STRICT = False  # <<<< КРИТИЧЕСКИ ВАЖНО: ДО настроек STORAGES
+
 # Настройки Cloudinary
 import cloudinary
 import cloudinary.uploader
@@ -129,9 +132,6 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
-# !!! МАГИЧЕСКАЯ СТРОКА: Говорит WhiteNoise игнорировать отсутствующие иконки админки
-WHITENOISE_MANIFEST_STRICT = False
 
 # Совместимость для старых пакетов
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
