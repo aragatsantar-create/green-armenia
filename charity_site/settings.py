@@ -107,11 +107,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'main', 'static'),
 ]
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'main', 'static'),
-]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Настройки Cloudinary
@@ -122,18 +117,18 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Настройки хранилищ (ИСПРАВЛЕННАЯ ВЕРСИЯ: без Manifest, чтобы избежать MissingFileError)
+# Настройки хранилищ (ОТКЛЮЧАЕМ сжатие, чтобы избежать ошибки FileNotFoundError)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",  # <-- Убрали слово Manifest
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",  # <-- Убрали слово Compressed
     },
 }
 
-# Для совместимости со старыми пакетами
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage' # <-- Убрали слово Manifest
+# Для совместимости
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage' # <-- Убрали слово Compressed
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
