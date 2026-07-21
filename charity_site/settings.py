@@ -104,8 +104,10 @@ LOCALE_PATHS = [
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+
+# Используем чистый pathlib (BASE_DIR уже является объектом Path)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'main', 'static'),
+    BASE_DIR / 'main' / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -117,7 +119,6 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Хранилища (ВАЖНО: используем StaticFilesStorage БЕЗ слова Compressed)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -127,11 +128,8 @@ STORAGES = {
     },
 }
 
-# Обязательно для совместимости со старым пакетом django-cloudinary-storage
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 MEDIA_URL = '/media/'
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
