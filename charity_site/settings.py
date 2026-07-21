@@ -1,3 +1,4 @@
+
 """
 Django settings for charity_site project.
 """
@@ -108,15 +109,18 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Настройки Cloudinary (Обязательно перед STORAGES)
+# Настройки Cloudinary
 import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Современная настройка хранилищ для Django 4.2+
+# Современные настройки хранилищ для Django 4.2+
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -125,6 +129,14 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+# !!! ВАЖНО: Эта строка "обманывает" старый пакет cloudinary_storage, 
+# чтобы он не искал удаленную настройку и не ломал сборку.
+# Она говорит использовать WhiteNoise для статики, а не Cloudinary.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Также добавим это для полной совместимости
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
 
