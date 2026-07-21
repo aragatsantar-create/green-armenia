@@ -117,22 +117,19 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Современные настройки хранилищ (Django 4.2+)
+# Хранилища (ВАЖНО: используем StaticFilesStorage БЕЗ слова Compressed)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
 
-# КРИТИЧЕСКИ ВАЖНО: Оставляем эту переменную специально для старой библиотеки 
-# django-cloudinary-storage, иначе она выдает AttributeError при collectstatic.
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-
-# Отключаем строгую проверку манифеста, чтобы избежать ошибок с missing files (icon-debug.svg)
-WHITENOISE_MANIFEST_STRICT = False
+# Обязательно для совместимости со старым пакетом django-cloudinary-storage
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
 
