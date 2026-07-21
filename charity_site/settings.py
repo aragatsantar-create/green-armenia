@@ -107,34 +107,33 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'main', 'static'),
 ]
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'main', 'static'),
+]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Настройки WhiteNoise (ОБЯЗАТЕЛЬНО в этом порядке)
-WHITENOISE_MANIFEST_STRICT = False  # <<<< КРИТИЧЕСКИ ВАЖНО: ДО настроек STORAGES
 
 # Настройки Cloudinary
 import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),
     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
-# Современные настройки хранилищ для Django 4.2+
+# Настройки хранилищ (ИСПРАВЛЕННАЯ ВЕРСИЯ: без Manifest, чтобы избежать MissingFileError)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",  # <-- Убрали слово Manifest
     },
 }
 
-# Совместимость для старых пакетов
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Для совместимости со старыми пакетами
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage' # <-- Убрали слово Manifest
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
