@@ -20,7 +20,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0h0brem7sc9#s6@p^2-&$
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 # Разрешаем наш домен и локальные адреса
-ALLOWED_HOSTS = ['aragats-antar.onrender.com', 'localhost', '127.0.0.1', '.onrender.com']
+ALLOWED_HOSTS = [
+    'aragatsantar.org',
+    'www.aragatsantar.org',
+    'aragats-antar.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    '.onrender.com'
+]
 
 # Application definition
 INSTALLED_APPS = [
