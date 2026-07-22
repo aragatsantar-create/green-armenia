@@ -231,11 +231,31 @@ def home(request):
             .social-link:hover {{ background: var(--brand); transform: translateY(-3px); }}
             .footer-bottom {{ max-width: 1200px; margin: 0 auto; padding: 25px 0; text-align: center; color: #777; font-size: 0.9em; }}
             .footer-bottom p {{ margin: 0; }}
+
+            /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{ 
-                .footer-content {{ grid-template-columns: 1fr; gap: 30px; }}
-                .btn-group {{ flex-direction: column; }}
+                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .logo-area {{ width: 100%; justify-content: center; }}
+                .logo-img {{ height: 60px !important; }}
+                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
+                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
+                .hero h2 {{ font-size: 2.2em !important; padding: 0 15px; }}
+                .container {{ padding: 40px 15px; }}
+                h2.section-title {{ font-size: 1.6em; }}
+                .project-swiper, .project-image {{ height: 250px !important; }}
+                .project-content {{ padding: 20px 15px; }}
+                .project-card h3 {{ font-size: 1.2em; }}
+                .btn-group {{ flex-direction: column; gap: 15px; }}
                 .btn-divider {{ display: none; }}
-                .btn {{ margin: 5px 0; }}
+                .btn {{ width: 100%; text-align: center; }}
+                .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
+                .social-links, .contact-item {{ justify-content: center; }}
+            }}
+            @media (max-width: 480px) {{
+                .hero h2 {{ font-size: 1.8em !important; }}
+                nav a {{ font-size: 0.85em; }}
+                .lang-link {{ font-size: 0.8em; padding: 3px 6px; }}
             }}
         </style>
     </head>
@@ -418,10 +438,23 @@ def join(request):
             .social-link:hover {{ background: var(--brand); transform: translateY(-3px); }}
             .footer-bottom {{ max-width: 1200px; margin: 0 auto; padding: 25px 0; text-align: center; color: #777; font-size: 0.9em; }}
             .footer-bottom p {{ margin: 0; }}
+
+            /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{ 
-                .footer-content {{ grid-template-columns: 1fr; gap: 30px; }}
+                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .logo-area {{ width: 100%; justify-content: center; }}
+                .logo-img {{ height: 60px !important; }}
+                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
+                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
                 .join-intro-container {{ grid-template-columns: 1fr; }}
                 .join-intro-image {{ order: -1; }}
+                .join-intro-title {{ font-size: 2em; }}
+                .join-container {{ padding: 0 15px; margin: 40px auto; }}
+                .join-header h1 {{ font-size: 2em; }}
+                .form-wrapper {{ padding: 25px 20px; }}
+                .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
+                .social-links, .contact-item {{ justify-content: center; }}
             }}
         </style>
     </head>
@@ -566,7 +599,21 @@ def about(request):
             .social-link:hover {{ background: var(--brand); transform: translateY(-3px); }}
             .footer-bottom {{ max-width: 1200px; margin: 0 auto; padding: 25px 0; text-align: center; color: #777; font-size: 0.9em; }}
             .footer-bottom p {{ margin: 0; }}
-            @media (max-width: 768px) {{ .footer-content {{ grid-template-columns: 1fr; gap: 30px; }} }}
+
+            /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
+            @media (max-width: 768px) {{ 
+                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .logo-area {{ width: 100%; justify-content: center; }}
+                .logo-img {{ height: 60px !important; }}
+                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
+                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
+                .about-container {{ margin: 100px 15px 40px; padding: 20px; }}
+                h1.page-title {{ font-size: 2em; }}
+                .story-content p {{ font-size: 1em; text-align: left; }}
+                .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
+                .social-links, .contact-item {{ justify-content: center; }}
+            }}
         </style>
     </head>
     <body>
@@ -770,12 +817,6 @@ def support(request):
             }}
             .btn-primary:hover {{ background-color: #0a5c59; transform: translateY(-2px); }}
             
-            @media (max-width: 768px) {{
-                .payment-methods {{ grid-template-columns: 1fr; }}
-                .support-hero h1 {{ font-size: 2em; }}
-                .bank-details strong {{ display: block; min-width: auto; margin-bottom: 5px; }}
-            }}
-            
             .main-footer {{ background: #1a1a1a; color: #ccc; padding: 60px 20px 0; margin-top: 80px; }}
             .footer-content {{ max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; padding-bottom: 40px; border-bottom: 1px solid #333; }}
             .footer-col h3, .footer-col h4 {{ color: white; margin-top: 0; margin-bottom: 20px; }}
@@ -790,6 +831,25 @@ def support(request):
             .social-link {{ display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #333; border-radius: 50%; color: white; transition: all 0.3s; }}
             .social-link:hover {{ background: var(--brand); transform: translateY(-3px); }}
             .footer-bottom {{ max-width: 1200px; margin: 0 auto; padding: 25px 0; text-align: center; color: #777; font-size: 0.9em; }}
+
+            /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
+            @media (max-width: 768px) {{
+                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .logo-area {{ width: 100%; justify-content: center; }}
+                .logo-img {{ height: 60px !important; }}
+                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
+                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
+                .support-hero {{ padding: 100px 15px 40px; }}
+                .support-hero h1 {{ font-size: 1.8em !important; }}
+                .support-hero p {{ font-size: 1em; }}
+                .support-container {{ padding: 0 15px; margin-top: -20px; }}
+                .payment-methods {{ grid-template-columns: 1fr; }}
+                .corporate-section {{ padding: 25px 20px; }}
+                .bank-details strong {{ display: block; min-width: auto; margin-bottom: 5px; }}
+                .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
+                .social-links, .contact-item {{ justify-content: center; }}
+            }}
         </style>
     </head>
     <body>
