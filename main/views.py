@@ -185,7 +185,7 @@ def home(request):
             .container {{ max-width: 900px; margin: 0 auto; padding: 60px 20px; }}
             h2.section-title {{ color: var(--brand); font-size: 2em; margin-bottom: 40px; position: relative; padding-bottom: 15px; }}
             h2.section-title::after {{ content: ''; position: absolute; bottom: 0; left: 0; width: 60px; height: 4px; background: var(--brand); }}
-            .project-card {{ background: white; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--brand); transition: transform 0.2s; overflow: hidden; }}
+            .project-card {{ background: white; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.2s; overflow: hidden; }}
             .project-card:hover {{ transform: translateY(-5px); }}
             .project-swiper {{ width: 100%; height: 350px; cursor: pointer; }}
             .project-swiper .swiper-slide {{ width: 100%; height: 100%; }}
