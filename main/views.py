@@ -234,15 +234,20 @@ def home(request):
 
             /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{ 
-                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .main-header {{ padding: 10px 0; }}
+                .main-header.scrolled {{ padding: 10px 0; }}
+                .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
                 .logo-area {{ width: 100%; justify-content: center; }}
-                .logo-img {{ height: 60px !important; }}
-                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
-                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
-                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
-                .hero h2 {{ font-size: 2.2em !important; padding: 0 15px; }}
-                .container {{ padding: 40px 15px; }}
-                h2.section-title {{ font-size: 1.6em; }}
+                .logo-img {{ height: 50px !important; }}
+                nav {{ flex-direction: row; flex-wrap: wrap; width: 100%; gap: 5px; justify-content: center; }}
+                nav a {{ font-size: 0.85em; padding: 5px 8px; text-align: center; white-space: nowrap; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
+                .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
+                
+                .hero {{ margin-top: 110px; height: 80vh; }}
+                .hero h2 {{ font-size: 2em !important; padding: 0 15px; }}
+                .container {{ padding: 40px 15px; margin-top: 0; }}
+                h2.section-title {{ font-size: 1.6em; margin-top: 20px; }}
                 .project-swiper, .project-image {{ height: 250px !important; }}
                 .project-content {{ padding: 20px 15px; }}
                 .project-card h3 {{ font-size: 1.2em; }}
@@ -253,9 +258,11 @@ def home(request):
                 .social-links, .contact-item {{ justify-content: center; }}
             }}
             @media (max-width: 480px) {{
-                .hero h2 {{ font-size: 1.8em !important; }}
-                nav a {{ font-size: 0.85em; }}
-                .lang-link {{ font-size: 0.8em; padding: 3px 6px; }}
+                .hero {{ margin-top: 100px; height: 70vh; }}
+                .hero h2 {{ font-size: 1.6em !important; }}
+                nav a {{ font-size: 0.75em; padding: 4px 6px; }}
+                .lang-link {{ font-size: 0.7em; padding: 3px 6px; }}
+                .logo-img {{ height: 45px !important; }}
             }}
         </style>
     </head>
@@ -441,17 +448,21 @@ def join(request):
 
             /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{ 
-                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .main-header {{ padding: 10px 0; }}
+                .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
                 .logo-area {{ width: 100%; justify-content: center; }}
-                .logo-img {{ height: 60px !important; }}
-                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
-                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
-                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
+                .logo-img {{ height: 50px !important; }}
+                nav {{ flex-direction: row; flex-wrap: wrap; width: 100%; gap: 5px; justify-content: center; }}
+                nav a {{ font-size: 0.85em; padding: 5px 8px; text-align: center; white-space: nowrap; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
+                .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
+                
+                .join-intro {{ margin-top: 110px; padding: 40px 15px; }}
                 .join-intro-container {{ grid-template-columns: 1fr; }}
                 .join-intro-image {{ order: -1; }}
-                .join-intro-title {{ font-size: 2em; }}
+                .join-intro-title {{ font-size: 1.8em; }}
                 .join-container {{ padding: 0 15px; margin: 40px auto; }}
-                .join-header h1 {{ font-size: 2em; }}
+                .join-header h1 {{ font-size: 1.8em; }}
                 .form-wrapper {{ padding: 25px 20px; }}
                 .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
                 .social-links, .contact-item {{ justify-content: center; }}
@@ -602,14 +613,17 @@ def about(request):
 
             /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{ 
-                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .main-header {{ padding: 10px 0; }}
+                .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
                 .logo-area {{ width: 100%; justify-content: center; }}
-                .logo-img {{ height: 60px !important; }}
-                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
-                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
-                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
-                .about-container {{ margin: 100px 15px 40px; padding: 20px; }}
-                h1.page-title {{ font-size: 2em; }}
+                .logo-img {{ height: 50px !important; }}
+                nav {{ flex-direction: row; flex-wrap: wrap; width: 100%; gap: 5px; justify-content: center; }}
+                nav a {{ font-size: 0.85em; padding: 5px 8px; text-align: center; white-space: nowrap; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
+                .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
+                
+                .about-container {{ margin: 110px 15px 40px; padding: 20px; }}
+                h1.page-title {{ font-size: 1.8em; }}
                 .story-content p {{ font-size: 1em; text-align: left; }}
                 .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
                 .social-links, .contact-item {{ justify-content: center; }}
@@ -834,13 +848,16 @@ def support(request):
 
             /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{
-                .header-inner {{ flex-direction: column; gap: 15px; padding: 15px 20px; }}
+                .main-header {{ padding: 10px 0; }}
+                .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
                 .logo-area {{ width: 100%; justify-content: center; }}
-                .logo-img {{ height: 60px !important; }}
-                nav {{ flex-direction: column; width: 100%; gap: 10px; align-items: center; }}
-                nav a {{ font-size: 0.95em; padding: 5px 0; text-align: center; width: 100%; }}
-                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; }}
-                .support-hero {{ padding: 100px 15px 40px; }}
+                .logo-img {{ height: 50px !important; }}
+                nav {{ flex-direction: row; flex-wrap: wrap; width: 100%; gap: 5px; justify-content: center; }}
+                nav a {{ font-size: 0.85em; padding: 5px 8px; text-align: center; white-space: nowrap; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
+                .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
+                
+                .support-hero {{ padding: 110px 15px 40px; }}
                 .support-hero h1 {{ font-size: 1.8em !important; }}
                 .support-hero p {{ font-size: 1em; }}
                 .support-container {{ padding: 0 15px; margin-top: -20px; }}
