@@ -151,14 +151,14 @@ def home(request):
 
     html = f"""
     <!DOCTYPE html>
-    <html lang="{{lang}}">
+    <html lang="{lang}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{BRAND_NAME}}</title>
+        <title>{BRAND_NAME}</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
         <style>
-            :root {{ --brand: {{BRAND_COLOR}}; }}
+            :root {{ --brand: {BRAND_COLOR}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.4s ease-in-out; background-color: transparent; padding: 30px 0; }}
             .main-header.scrolled {{ background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
@@ -180,7 +180,7 @@ def home(request):
             .lang-link {{ color: white; text-decoration: none; font-size: 0.9em; font-weight: bold; padding: 5px 8px; border-radius: 5px; transition: background 0.3s; }}
             .main-header.scrolled .lang-link {{ color: #333; }}
             .lang-link:hover, .lang-link.active {{ background: var(--brand); color: white !important; }}
-            .hero {{ background: linear-gradient(rgba(15, 120, 116, 0.3), rgba(15, 120, 116, 0.25)), url('{{HERO_IMAGE_URL}}'); background-size: cover; background-position: center; height: 100vh; display: flex; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; }}
+            .hero {{ background: linear-gradient(rgba(15, 120, 116, 0.3), rgba(15, 120, 116, 0.25)), url('{HERO_IMAGE_URL}'); background-size: cover; background-position: center; height: 100vh; display: flex; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; }}
             .hero h2 {{ font-size: 4em; margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.5); font-weight: 800; line-height: 1.2; }}
             .container {{ max-width: 900px; margin: 0 auto; padding: 60px 20px; }}
             h2.section-title {{ color: var(--brand); font-size: 2em; margin-bottom: 40px; position: relative; padding-bottom: 15px; }}
@@ -283,22 +283,22 @@ def home(request):
         <header class="main-header" id="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{{nav_links}}{{lang_switcher}}</nav>
+                <nav>{nav_links}{lang_switcher}</nav>
             </div>
         </header>
         
         <!-- Добавлен класс hero-clickable и onclick -->
-        <div class="hero"><h2 class="hero-clickable" onclick="openHeroVideo()">{{t['hero_title']}}</h2></div>
+        <div class="hero"><h2 class="hero-clickable" onclick="openHeroVideo()">{t['hero_title']}</h2></div>
         
         <div class="container" id="projects">
-            <h2 class="section-title">{{t['projects']}}</h2>
-            {{projects_html}}
-            <h2 class="section-title" style="margin-top: 80px;">{{t['how_to_help']}}</h2>
-            <p style="font-size: 1.2em; text-align: center; max-width: 700px; margin: 0 auto 40px;">{{t['support_message']}}</p>
+            <h2 class="section-title">{t['projects']}</h2>
+            {projects_html}
+            <h2 class="section-title" style="margin-top: 80px;">{t['how_to_help']}</h2>
+            <p style="font-size: 1.2em; text-align: center; max-width: 700px; margin: 0 auto 40px;">{t['support_message']}</p>
             <div class="btn-group">
-                <a href="/support/" class="btn btn-primary">{{t['support_project']}}</a>
+                <a href="/support/" class="btn btn-primary">{t['support_project']}</a>
                 <span class="btn-divider"></span>
-                <a href="/join/" class="btn btn-secondary">{{t['join_us']}}</a>
+                <a href="/join/" class="btn btn-secondary">{t['join_us']}</a>
             </div>
         </div>
         
@@ -309,17 +309,17 @@ def home(request):
             <img src="" alt="Full size" id="lightbox-img">
         </div>
         
-        <!-- Модальное окно для видео -->
-        <div class="video-modal" id="videoModal" onclick="closeHeroVideo(event)">
-            <div class="video-modal-content">
-                <video id="heroVideo" controls>
-                    <source src="/static/join-video.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-        </div>
+<!-- Модальное окно для видео -->
+<div class="video-modal" id="videoModal" onclick="closeHeroVideo(event)">
+    <div class="video-modal-content">
+        <video id="heroVideo" controls autoplay>
+            <source src="/static/mountain-timelapse.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+</div>
         
-        {{footer_html}}
+        {footer_html}
         
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script>
@@ -432,13 +432,13 @@ def join(request):
     csrf_token = get_token(request)
     html = f"""
     <!DOCTYPE html>
-    <html lang="{{lang}}">
+    <html lang="{lang}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{t['join_title']}} - {{BRAND_NAME}}</title>
+        <title>{t['join_title']} - {BRAND_NAME}</title>
         <style>
-            :root {{ --brand: {{BRAND_COLOR}}; }}
+            :root {{ --brand: {BRAND_COLOR}; }}
             html {{ scroll-behavior: smooth; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
@@ -528,19 +528,19 @@ def join(request):
         <header class="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{{nav_links}}{{lang_switcher}}</nav>
+                <nav>{nav_links}{lang_switcher}</nav>
             </div>
         </header>
         
         <div class="join-intro">
             <div class="join-intro-container">
                 <div class="join-intro-text">
-                    <h2 class="join-intro-title">{{t['who_we_need']}}</h2>
-                    <p>{{t['join_text_1']}}</p>
-                    <p>{{t['join_text_2']}}</p>
-                    <p>{{t['join_text_3']}}</p>
-                    <p>{{t['join_text_4']}}</p>
-                    <p>{{t['join_text_5']}}</p>
+                    <h2 class="join-intro-title">{t['who_we_need']}</h2>
+                    <p>{t['join_text_1']}</p>
+                    <p>{t['join_text_2']}</p>
+                    <p>{t['join_text_3']}</p>
+                    <p>{t['join_text_4']}</p>
+                    <p>{t['join_text_5']}</p>
                 </div>
                 <a href="#join-form" class="scroll-to-form-video">
                     <div class="join-intro-image">
@@ -554,21 +554,21 @@ def join(request):
         </div>
         
         <div class="join-container" id="join-form">
-            <div class="join-header"><h1>{{t['join_heading']}}</h1><p>{{t['join_description']}}</p></div>
+            <div class="join-header"><h1>{t['join_heading']}</h1><p>{t['join_description']}</p></div>
             <div class="form-wrapper">
-                {{'<div class="success-message">' + t['success_message'] + '</div>' if success else ''}}
+                {'<div class="success-message">' + t['success_message'] + '</div>' if success else ''}
                 <form method="post" action="">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}">
-                    <div class="form-group"><label for="id_name">{{_('Ваше имя')}}</label><input type="text" name="name" id="id_name" class="form-input" required></div>
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
+                    <div class="form-group"><label for="id_name">{_('Ваше имя')}</label><input type="text" name="name" id="id_name" class="form-input" required></div>
                     <div class="form-group"><label for="id_email">Email</label><input type="email" name="email" id="id_email" class="form-input" required></div>
-                    <div class="form-group"><label for="id_phone">{{_('Телефон')}}</label><input type="text" name="phone" id="id_phone" class="form-input"></div>
-                    <div class="form-group"><label for="id_message">{{_('Сообщение')}}</label><textarea name="message" id="id_message" class="form-textarea" rows="5"></textarea></div>
-                    <button type="submit" class="submit-btn">{{t['submit']}}</button>
+                    <div class="form-group"><label for="id_phone">{_('Телефон')}</label><input type="text" name="phone" id="id_phone" class="form-input"></div>
+                    <div class="form-group"><label for="id_message">{_('Сообщение')}</label><textarea name="message" id="id_message" class="form-textarea" rows="5"></textarea></div>
+                    <button type="submit" class="submit-btn">{t['submit']}</button>
                 </form>
             </div>
-            <div style="text-align: center;"><a href="/" class="back-btn"><span>←</span> {{t['back_home']}}</a></div>
+            <div style="text-align: center;"><a href="/" class="back-btn"><span>←</span> {t['back_home']}</a></div>
         </div>
-        {{footer_html}}
+        {footer_html}
     </body>
     </html>
     """
@@ -620,13 +620,13 @@ def about(request):
         
     html = f"""
     <!DOCTYPE html>
-    <html lang="{{lang}}">
+    <html lang="{lang}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{page_title}} - {{BRAND_NAME}}</title>
+        <title>{page_title} - {BRAND_NAME}</title>
         <style>
-            :root {{ --brand: {{BRAND_COLOR}}; }}
+            :root {{ --brand: {BRAND_COLOR}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.7; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
             .header-inner {{ max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }}
@@ -689,16 +689,16 @@ def about(request):
         <header class="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{{nav_links}}{{lang_switcher}}</nav>
+                <nav>{nav_links}{lang_switcher}</nav>
             </div>
         </header>
         <div class="about-container">
-            <h1 class="page-title">{{page_title}}</h1>
-            {{image_html}}
-            <div class="story-content">{{text}}</div>
-            <a href="/" class="back-btn"><span>←</span> {{t['back_home']}}</a>
+            <h1 class="page-title">{page_title}</h1>
+            {image_html}
+            <div class="story-content">{text}</div>
+            <a href="/" class="back-btn"><span>←</span> {t['back_home']}</a>
         </div>
-        {{footer_html}}
+        {footer_html}
     </body>
     </html>
     """
@@ -783,13 +783,13 @@ def support(request):
 
     html = f"""
     <!DOCTYPE html>
-    <html lang="{{lang}}">
+    <html lang="{lang}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{t['support']}} - {{BRAND_NAME}}</title>
+        <title>{t['support']} - {BRAND_NAME}</title>
         <style>
-            :root {{ --brand: {{BRAND_COLOR}}; }}
+            :root {{ --brand: {BRAND_COLOR}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
             .header-inner {{ max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }}
@@ -928,62 +928,62 @@ def support(request):
         <header class="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{{nav_links}}{{lang_switcher}}</nav>
+                <nav>{nav_links}{lang_switcher}</nav>
             </div>
         </header>
 
         <div class="support-hero">
-            <h1>{{t['support_title']}}</h1>
-            <p>{{t['support_subtitle']}}</p>
+            <h1>{t['support_title']}</h1>
+            <p>{t['support_subtitle']}</p>
         </div>
 
         <div class="support-container">
             <div class="payment-methods">
                 <div class="payment-card featured">
                     <div class="payment-icon">💳</div>
-                    <h3>{{t['method_cards']}}</h3>
-                    <p>{{t['method_cards_desc']}}</p>
-                    {{donorbox_embed}}
+                    <h3>{t['method_cards']}</h3>
+                    <p>{t['method_cards_desc']}</p>
+                    {donorbox_embed}
                 </div>
                 <div class="payment-card">
-                    <div class="payment-icon">🇷🇺</div>
-                    <h3>{{t['method_mir']}}</h3>
-                    <p>{{t['method_mir_desc']}}</p>
-                    {{qr_sbp}}
-                    <div class="status-badge">🔜 {{t['coming_soon']}}</div>
+                    <div class="payment-icon">🇷</div>
+                    <h3>{t['method_mir']}</h3>
+                    <p>{t['method_mir_desc']}</p>
+                    {qr_sbp}
+                    <div class="status-badge">🔜 {t['coming_soon']}</div>
                 </div>
                 <div class="payment-card">
                     <div class="payment-icon">🇦🇲</div>
-                    <h3>{{t['method_idram']}}</h3>
-                    <p>{{t['method_idram_desc']}}</p>
-                    {{qr_idram}}
-                    <div class="status-badge">🔜 {{t['coming_soon']}}</div>
+                    <h3>{t['method_idram']}</h3>
+                    <p>{t['method_idram_desc']}</p>
+                    {qr_idram}
+                    <div class="status-badge">🔜 {t['coming_soon']}</div>
                 </div>
                 <div class="payment-card">
                     <div class="payment-icon"></div>
-                    <h3>{{t['method_crypto']}}</h3>
-                    <p>{{t['method_crypto_desc']}}</p>
-                    {{qr_crypto}}
-                    <div class="status-badge">🔜 {{t['coming_soon']}}</div>
+                    <h3>{t['method_crypto']}</h3>
+                    <p>{t['method_crypto_desc']}</p>
+                    {qr_crypto}
+                    <div class="status-badge">🔜 {t['coming_soon']}</div>
                 </div>
             </div>
 
             <div class="corporate-section">
-                <h2>{{t['corporate_title']}}</h2>
-                <p>{{t['corporate_desc']}}</p>
+                <h2>{t['corporate_title']}</h2>
+                <p>{t['corporate_desc']}</p>
                 <div class="bank-details">
-                    <div><strong>{{t['bank_name']}}:</strong> AMERIBANK CJSC, Yerevan, Armenia</div>
+                    <div><strong>{t['bank_name']}:</strong> AMERIBANK CJSC, Yerevan, Armenia</div>
                     <div><strong>SWIFT:</strong> AIIBAM22</div>
-                    <div><strong>{{t['account_name']}}:</strong> Aragats Antar Charity Foundation</div>
+                    <div><strong>{t['account_name']}:</strong> Aragats Antar Charity Foundation</div>
                     <div><strong>Account (USD):</strong> 1111111111111111 <em style="color: #999;">(замените на реальный)</em></div>
                     <div><strong>Account (AMD):</strong> 2222222222222222 <em style="color: #999;">(замените на реальный)</em></div>
                     <div><strong>Account (RUB):</strong> 3333333333333333 <em style="color: #999;">(замените на реальный)</em></div>
                 </div>
-                <a href="mailto:info@aragatsantar.am?subject=Корпоративное партнерство" class="btn-primary">{{t['contact_for_corp']}}</a>
+                <a href="mailto:info@aragatsantar.am?subject=Корпоративное партнерство" class="btn-primary">{t['contact_for_corp']}</a>
             </div>
         </div>
 
-        {{footer_html}}
+        {footer_html}
     </body>
     </html>
     """
@@ -1008,11 +1008,11 @@ def import_data(request):
                 <a href="/admin/" style="color: blue; margin: 10px;">В админку</a>
             </p>
             <p style="color: red; text-align: center; margin-top: 50px; font-weight: bold;">
-                ⚠️ ВАЖНО: Удалите функцию import_data из views.py и маршрут из urls.py после использования!
+                ️ ВАЖНО: Удалите функцию import_data из views.py и маршрут из urls.py после использования!
             </p>
         """)
     except Exception as e:
-        return HttpResponse(f"<h1 style='color: red;'>❌ Ошибка импорта:</h1><p>{str(e)}</p><p>Проверьте, что файл fixtures.json существует в корне проекта.</p>")
+        return HttpResponse(f"<h1 style='color: red;'> Ошибка импорта:</h1><p>{str(e)}</p><p>Проверьте, что файл fixtures.json существует в корне проекта.</p>")
 
 
 from django.contrib.auth.models import User
