@@ -273,7 +273,7 @@ def home(request):
                 <nav>{nav_links}{lang_switcher}</nav>
             </div>
         </header>
-        <div class="hero"><h2>{t['hero_title']}</h2></div>
+        <div class="hero"><h2 class="hero-clickable" onclick="openHeroVideo()">{t['hero_title']}</h2></div>
         <div class="container" id="projects">
             <h2 class="section-title">{t['projects']}</h2>
             {projects_html}
@@ -291,6 +291,14 @@ def home(request):
             <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
             <img src="" alt="Full size" id="lightbox-img">
         </div>
+<div class="video-modal" id="videoModal" onclick="closeHeroVideo(event)">
+    <div class="video-modal-content">
+        <video id="heroVideo" controls>
+            <source src="/static/join-video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+</div>
         {footer_html}
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script>
@@ -322,6 +330,29 @@ def home(request):
                 if (window.scrollY > 50) header.classList.add('scrolled'); else header.classList.remove('scrolled');
             }});
         </script>
+function openHeroVideo() {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('heroVideo');
+    modal.classList.add('active');
+    video.play();
+    document.body.style.overflow = 'hidden';
+    
+    // После завершения видео — переход на /join/
+    video.onended = function() {
+        closeHeroVideo();
+        window.location.href = '/join/';
+    };
+}
+
+function closeHeroVideo(event) {
+    if (event && event.target !== event.currentTarget && !event.target.classList.contains('video-modal-content')) return;
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('heroVideo');
+    modal.classList.remove('active');
+    video.pause();
+    video.currentTime = 0;
+    document.body.style.overflow = '';
+}
     </body>
     </html>
     """
@@ -447,6 +478,40 @@ def join(request):
             .footer-bottom p {{ margin: 0; }}
 
             /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
+.hero-clickable { cursor: pointer; transition: transform 0.3s; }
+.hero-clickable:hover { transform: scale(1.05); }
+
+.video-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+.video-modal.active { display: flex; }
+.video-modal-content {
+    width: 90%;
+    max-width: 1200px;
+    position: relative;
+}
+.video-modal-content video {
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+    .video-modal-content { width: 95%; }
+    .hero-clickable::after {
+        content: ' ▶';
+        font-size: 0.6em;
+        opacity: 0.8;
+    }
+}
             @media (max-width: 768px) {{ 
                 .main-header {{ padding: 10px 0; }}
                 .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
