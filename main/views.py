@@ -151,14 +151,14 @@ def home(request):
 
     html = f"""
     <!DOCTYPE html>
-    <html lang="{lang}">
+    <html lang="{{lang}}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{BRAND_NAME}</title>
+        <title>{{BRAND_NAME}}</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
         <style>
-            :root {{ --brand: {BRAND_COLOR}; }}
+            :root {{ --brand: {{BRAND_COLOR}}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.4s ease-in-out; background-color: transparent; padding: 30px 0; }}
             .main-header.scrolled {{ background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
@@ -180,7 +180,7 @@ def home(request):
             .lang-link {{ color: white; text-decoration: none; font-size: 0.9em; font-weight: bold; padding: 5px 8px; border-radius: 5px; transition: background 0.3s; }}
             .main-header.scrolled .lang-link {{ color: #333; }}
             .lang-link:hover, .lang-link.active {{ background: var(--brand); color: white !important; }}
-            .hero {{ background: linear-gradient(rgba(15, 120, 116, 0.3), rgba(15, 120, 116, 0.25)), url('{HERO_IMAGE_URL}'); background-size: cover; background-position: center; height: 100vh; display: flex; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; }}
+            .hero {{ background: linear-gradient(rgba(15, 120, 116, 0.3), rgba(15, 120, 116, 0.25)), url('{{HERO_IMAGE_URL}}'); background-size: cover; background-position: center; height: 100vh; display: flex; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; }}
             .hero h2 {{ font-size: 4em; margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.5); font-weight: 800; line-height: 1.2; }}
             .container {{ max-width: 900px; margin: 0 auto; padding: 60px 20px; }}
             h2.section-title {{ color: var(--brand); font-size: 2em; margin-bottom: 40px; position: relative; padding-bottom: 15px; }}
@@ -215,6 +215,15 @@ def home(request):
             .lightbox-close {{ position: absolute; top: 20px; right: 40px; color: white; font-size: 40px; cursor: pointer; }}
             .lightbox-prev, .lightbox-next {{ position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 40px; cursor: pointer; padding: 20px; }}
             .lightbox-prev {{ left: 20px; }} .lightbox-next {{ right: 20px; }}
+            
+            /* Стили для видео-модалки */
+            .hero-clickable {{ cursor: pointer; transition: transform 0.3s; }}
+            .hero-clickable:hover {{ transform: scale(1.05); }}
+            .video-modal {{ display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 10000; justify-content: center; align-items: center; }}
+            .video-modal.active {{ display: flex; }}
+            .video-modal-content {{ width: 90%; max-width: 1200px; position: relative; }}
+            .video-modal-content video {{ width: 100%; max-height: 90vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }}
+
             .main-footer {{ background: #1a1a1a; color: #ccc; padding: 60px 20px 0; margin-top: 80px; }}
             .footer-content {{ max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; padding-bottom: 40px; border-bottom: 1px solid #333; }}
             .footer-col h3, .footer-col h4 {{ color: white; margin-top: 0; margin-bottom: 20px; }}
@@ -246,6 +255,8 @@ def home(request):
                 
                 .hero {{ margin-top: 110px; height: 80vh; }}
                 .hero h2 {{ font-size: 2em !important; padding: 0 15px; }}
+                .hero-clickable::after {{ content: ' ▶'; font-size: 0.5em; opacity: 0.8; vertical-align: middle; }}
+                
                 .container {{ padding: 40px 15px; margin-top: 0; }}
                 h2.section-title {{ font-size: 1.6em; margin-top: 20px; }}
                 .project-swiper, .project-image {{ height: 250px !important; }}
@@ -256,6 +267,8 @@ def home(request):
                 .btn {{ width: 100%; text-align: center; }}
                 .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
                 .social-links, .contact-item {{ justify-content: center; }}
+                
+                .video-modal-content {{ width: 95%; }}
             }}
             @media (max-width: 480px) {{
                 .hero {{ margin-top: 100px; height: 70vh; }}
@@ -270,39 +283,48 @@ def home(request):
         <header class="main-header" id="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{nav_links}{lang_switcher}</nav>
+                <nav>{{nav_links}}{{lang_switcher}}</nav>
             </div>
         </header>
-        <div class="hero"><h2 class="hero-clickable" onclick="openHeroVideo()">{t['hero_title']}</h2></div>
+        
+        <!-- Добавлен класс hero-clickable и onclick -->
+        <div class="hero"><h2 class="hero-clickable" onclick="openHeroVideo()">{{t['hero_title']}}</h2></div>
+        
         <div class="container" id="projects">
-            <h2 class="section-title">{t['projects']}</h2>
-            {projects_html}
-            <h2 class="section-title" style="margin-top: 80px;">{t['how_to_help']}</h2>
-            <p style="font-size: 1.2em; text-align: center; max-width: 700px; margin: 0 auto 40px;">{t['support_message']}</p>
+            <h2 class="section-title">{{t['projects']}}</h2>
+            {{projects_html}}
+            <h2 class="section-title" style="margin-top: 80px;">{{t['how_to_help']}}</h2>
+            <p style="font-size: 1.2em; text-align: center; max-width: 700px; margin: 0 auto 40px;">{{t['support_message']}}</p>
             <div class="btn-group">
-                <a href="/support/" class="btn btn-primary">{t['support_project']}</a>
+                <a href="/support/" class="btn btn-primary">{{t['support_project']}}</a>
                 <span class="btn-divider"></span>
-                <a href="/join/" class="btn btn-secondary">{t['join_us']}</a>
+                <a href="/join/" class="btn btn-secondary">{{t['join_us']}}</a>
             </div>
         </div>
+        
         <div class="lightbox" id="lightbox">
             <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
             <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
             <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
             <img src="" alt="Full size" id="lightbox-img">
         </div>
-<div class="video-modal" id="videoModal" onclick="closeHeroVideo(event)">
-    <div class="video-modal-content">
-        <video id="heroVideo" controls>
-            <source src="/static/join-video.mp4" type="video/mp4">
-            Ваш браузер не поддерживает видео.
-        </video>
-    </div>
-</div>
-        {footer_html}
+        
+        <!-- Модальное окно для видео -->
+        <div class="video-modal" id="videoModal" onclick="closeHeroVideo(event)">
+            <div class="video-modal-content">
+                <video id="heroVideo" controls>
+                    <source src="/static/join-video.mp4" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+            </div>
+        </div>
+        
+        {{footer_html}}
+        
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script>
             let currentLightboxIndex = 0, currentProjectImages = [];
+            
             function openLightbox(imageUrl, index, projectId) {{
                 const lightbox = document.getElementById('lightbox'), lightboxImg = document.getElementById('lightbox-img');
                 const projectSwiper = document.getElementById(projectId);
@@ -329,30 +351,32 @@ def home(request):
                 const header = document.getElementById('main-header');
                 if (window.scrollY > 50) header.classList.add('scrolled'); else header.classList.remove('scrolled');
             }});
-        </script>
-function openHeroVideo() {
-    const modal = document.getElementById('videoModal');
-    const video = document.getElementById('heroVideo');
-    modal.classList.add('active');
-    video.play();
-    document.body.style.overflow = 'hidden';
-    
-    // После завершения видео — переход на /join/
-    video.onended = function() {
-        closeHeroVideo();
-        window.location.href = '/join/';
-    };
-}
 
-function closeHeroVideo(event) {
-    if (event && event.target !== event.currentTarget && !event.target.classList.contains('video-modal-content')) return;
-    const modal = document.getElementById('videoModal');
-    const video = document.getElementById('heroVideo');
-    modal.classList.remove('active');
-    video.pause();
-    video.currentTime = 0;
-    document.body.style.overflow = '';
-}
+            /* === ФУНКЦИИ ДЛЯ ВИДЕО === */
+            function openHeroVideo() {{
+                const modal = document.getElementById('videoModal');
+                const video = document.getElementById('heroVideo');
+                modal.classList.add('active');
+                video.play();
+                document.body.style.overflow = 'hidden';
+                
+                // После завершения видео — переход на /join/
+                video.onended = function() {{
+                    closeHeroVideo();
+                    window.location.href = '/join/';
+                }};
+            }}
+
+            function closeHeroVideo(event) {{
+                if (event && event.target !== event.currentTarget && !event.target.classList.contains('video-modal-content')) return;
+                const modal = document.getElementById('videoModal');
+                const video = document.getElementById('heroVideo');
+                modal.classList.remove('active');
+                video.pause();
+                video.currentTime = 0;
+                document.body.style.overflow = '';
+            }}
+        </script>
     </body>
     </html>
     """
@@ -408,13 +432,13 @@ def join(request):
     csrf_token = get_token(request)
     html = f"""
     <!DOCTYPE html>
-    <html lang="{lang}">
+    <html lang="{{lang}}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{t['join_title']} - {BRAND_NAME}</title>
+        <title>{{t['join_title']}} - {{BRAND_NAME}}</title>
         <style>
-            :root {{ --brand: {BRAND_COLOR}; }}
+            :root {{ --brand: {{BRAND_COLOR}}; }}
             html {{ scroll-behavior: smooth; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
@@ -478,40 +502,6 @@ def join(request):
             .footer-bottom p {{ margin: 0; }}
 
             /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
-.hero-clickable { cursor: pointer; transition: transform 0.3s; }
-.hero-clickable:hover { transform: scale(1.05); }
-
-.video-modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.95);
-    z-index: 10000;
-    justify-content: center;
-    align-items: center;
-}
-.video-modal.active { display: flex; }
-.video-modal-content {
-    width: 90%;
-    max-width: 1200px;
-    position: relative;
-}
-.video-modal-content video {
-    width: 100%;
-    max-height: 90vh;
-    border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-}
-
-@media (max-width: 768px) {
-    .video-modal-content { width: 95%; }
-    .hero-clickable::after {
-        content: ' ▶';
-        font-size: 0.6em;
-        opacity: 0.8;
-    }
-}
             @media (max-width: 768px) {{ 
                 .main-header {{ padding: 10px 0; }}
                 .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
@@ -538,19 +528,19 @@ def join(request):
         <header class="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{nav_links}{lang_switcher}</nav>
+                <nav>{{nav_links}}{{lang_switcher}}</nav>
             </div>
         </header>
         
         <div class="join-intro">
             <div class="join-intro-container">
                 <div class="join-intro-text">
-                    <h2 class="join-intro-title">{t['who_we_need']}</h2>
-                    <p>{t['join_text_1']}</p>
-                    <p>{t['join_text_2']}</p>
-                    <p>{t['join_text_3']}</p>
-                    <p>{t['join_text_4']}</p>
-                    <p>{t['join_text_5']}</p>
+                    <h2 class="join-intro-title">{{t['who_we_need']}}</h2>
+                    <p>{{t['join_text_1']}}</p>
+                    <p>{{t['join_text_2']}}</p>
+                    <p>{{t['join_text_3']}}</p>
+                    <p>{{t['join_text_4']}}</p>
+                    <p>{{t['join_text_5']}}</p>
                 </div>
                 <a href="#join-form" class="scroll-to-form-video">
                     <div class="join-intro-image">
@@ -564,21 +554,21 @@ def join(request):
         </div>
         
         <div class="join-container" id="join-form">
-            <div class="join-header"><h1>{t['join_heading']}</h1><p>{t['join_description']}</p></div>
+            <div class="join-header"><h1>{{t['join_heading']}}</h1><p>{{t['join_description']}}</p></div>
             <div class="form-wrapper">
-                {'<div class="success-message">' + t['success_message'] + '</div>' if success else ''}
+                {{'<div class="success-message">' + t['success_message'] + '</div>' if success else ''}}
                 <form method="post" action="">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
-                    <div class="form-group"><label for="id_name">{_('Ваше имя')}</label><input type="text" name="name" id="id_name" class="form-input" required></div>
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}">
+                    <div class="form-group"><label for="id_name">{{_('Ваше имя')}}</label><input type="text" name="name" id="id_name" class="form-input" required></div>
                     <div class="form-group"><label for="id_email">Email</label><input type="email" name="email" id="id_email" class="form-input" required></div>
-                    <div class="form-group"><label for="id_phone">{_('Телефон')}</label><input type="text" name="phone" id="id_phone" class="form-input"></div>
-                    <div class="form-group"><label for="id_message">{_('Сообщение')}</label><textarea name="message" id="id_message" class="form-textarea" rows="5"></textarea></div>
-                    <button type="submit" class="submit-btn">{t['submit']}</button>
+                    <div class="form-group"><label for="id_phone">{{_('Телефон')}}</label><input type="text" name="phone" id="id_phone" class="form-input"></div>
+                    <div class="form-group"><label for="id_message">{{_('Сообщение')}}</label><textarea name="message" id="id_message" class="form-textarea" rows="5"></textarea></div>
+                    <button type="submit" class="submit-btn">{{t['submit']}}</button>
                 </form>
             </div>
-            <div style="text-align: center;"><a href="/" class="back-btn"><span>←</span> {t['back_home']}</a></div>
+            <div style="text-align: center;"><a href="/" class="back-btn"><span>←</span> {{t['back_home']}}</a></div>
         </div>
-        {footer_html}
+        {{footer_html}}
     </body>
     </html>
     """
@@ -630,13 +620,13 @@ def about(request):
         
     html = f"""
     <!DOCTYPE html>
-    <html lang="{lang}">
+    <html lang="{{lang}}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{page_title} - {BRAND_NAME}</title>
+        <title>{{page_title}} - {{BRAND_NAME}}</title>
         <style>
-            :root {{ --brand: {BRAND_COLOR}; }}
+            :root {{ --brand: {{BRAND_COLOR}}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.7; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
             .header-inner {{ max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }}
@@ -699,16 +689,16 @@ def about(request):
         <header class="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{nav_links}{lang_switcher}</nav>
+                <nav>{{nav_links}}{{lang_switcher}}</nav>
             </div>
         </header>
         <div class="about-container">
-            <h1 class="page-title">{page_title}</h1>
-            {image_html}
-            <div class="story-content">{text}</div>
-            <a href="/" class="back-btn"><span>←</span> {t['back_home']}</a>
+            <h1 class="page-title">{{page_title}}</h1>
+            {{image_html}}
+            <div class="story-content">{{text}}</div>
+            <a href="/" class="back-btn"><span>←</span> {{t['back_home']}}</a>
         </div>
-        {footer_html}
+        {{footer_html}}
     </body>
     </html>
     """
@@ -793,13 +783,13 @@ def support(request):
 
     html = f"""
     <!DOCTYPE html>
-    <html lang="{lang}">
+    <html lang="{{lang}}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{t['support']} - {BRAND_NAME}</title>
+        <title>{{t['support']}} - {{BRAND_NAME}}</title>
         <style>
-            :root {{ --brand: {BRAND_COLOR}; }}
+            :root {{ --brand: {{BRAND_COLOR}}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
             .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
             .header-inner {{ max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }}
@@ -938,62 +928,62 @@ def support(request):
         <header class="main-header">
             <div class="header-inner">
                 <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
-                <nav>{nav_links}{lang_switcher}</nav>
+                <nav>{{nav_links}}{{lang_switcher}}</nav>
             </div>
         </header>
 
         <div class="support-hero">
-            <h1>{t['support_title']}</h1>
-            <p>{t['support_subtitle']}</p>
+            <h1>{{t['support_title']}}</h1>
+            <p>{{t['support_subtitle']}}</p>
         </div>
 
         <div class="support-container">
             <div class="payment-methods">
                 <div class="payment-card featured">
                     <div class="payment-icon">💳</div>
-                    <h3>{t['method_cards']}</h3>
-                    <p>{t['method_cards_desc']}</p>
-                    {donorbox_embed}
+                    <h3>{{t['method_cards']}}</h3>
+                    <p>{{t['method_cards_desc']}}</p>
+                    {{donorbox_embed}}
                 </div>
                 <div class="payment-card">
                     <div class="payment-icon">🇷🇺</div>
-                    <h3>{t['method_mir']}</h3>
-                    <p>{t['method_mir_desc']}</p>
-                    {qr_sbp}
-                    <div class="status-badge">🔜 {t['coming_soon']}</div>
+                    <h3>{{t['method_mir']}}</h3>
+                    <p>{{t['method_mir_desc']}}</p>
+                    {{qr_sbp}}
+                    <div class="status-badge">🔜 {{t['coming_soon']}}</div>
                 </div>
                 <div class="payment-card">
                     <div class="payment-icon">🇦🇲</div>
-                    <h3>{t['method_idram']}</h3>
-                    <p>{t['method_idram_desc']}</p>
-                    {qr_idram}
-                    <div class="status-badge">🔜 {t['coming_soon']}</div>
+                    <h3>{{t['method_idram']}}</h3>
+                    <p>{{t['method_idram_desc']}}</p>
+                    {{qr_idram}}
+                    <div class="status-badge">🔜 {{t['coming_soon']}}</div>
                 </div>
                 <div class="payment-card">
                     <div class="payment-icon"></div>
-                    <h3>{t['method_crypto']}</h3>
-                    <p>{t['method_crypto_desc']}</p>
-                    {qr_crypto}
-                    <div class="status-badge">🔜 {t['coming_soon']}</div>
+                    <h3>{{t['method_crypto']}}</h3>
+                    <p>{{t['method_crypto_desc']}}</p>
+                    {{qr_crypto}}
+                    <div class="status-badge">🔜 {{t['coming_soon']}}</div>
                 </div>
             </div>
 
             <div class="corporate-section">
-                <h2>{t['corporate_title']}</h2>
-                <p>{t['corporate_desc']}</p>
+                <h2>{{t['corporate_title']}}</h2>
+                <p>{{t['corporate_desc']}}</p>
                 <div class="bank-details">
-                    <div><strong>{t['bank_name']}:</strong> AMERIBANK CJSC, Yerevan, Armenia</div>
+                    <div><strong>{{t['bank_name']}}:</strong> AMERIBANK CJSC, Yerevan, Armenia</div>
                     <div><strong>SWIFT:</strong> AIIBAM22</div>
-                    <div><strong>{t['account_name']}:</strong> Aragats Antar Charity Foundation</div>
+                    <div><strong>{{t['account_name']}}:</strong> Aragats Antar Charity Foundation</div>
                     <div><strong>Account (USD):</strong> 1111111111111111 <em style="color: #999;">(замените на реальный)</em></div>
                     <div><strong>Account (AMD):</strong> 2222222222222222 <em style="color: #999;">(замените на реальный)</em></div>
                     <div><strong>Account (RUB):</strong> 3333333333333333 <em style="color: #999;">(замените на реальный)</em></div>
                 </div>
-                <a href="mailto:info@aragatsantar.am?subject=Корпоративное партнерство" class="btn-primary">{t['contact_for_corp']}</a>
+                <a href="mailto:info@aragatsantar.am?subject=Корпоративное партнерство" class="btn-primary">{{t['contact_for_corp']}}</a>
             </div>
         </div>
 
-        {footer_html}
+        {{footer_html}}
     </body>
     </html>
     """
