@@ -191,3 +191,9 @@ msgstr "Who we need"
 #: .\main\views.py:636
 msgid "Раздел 'О нас' пока заполняется..."
 msgstr "The 'About' section is still being filled..."
+
+msgid "Поддержать"
+msgstr "Support"
+
+msgid "Навигация"
+msgstr "Navigation"
