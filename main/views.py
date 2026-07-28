@@ -253,7 +253,7 @@ def home(request):
                 .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
                 .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
                 
-                .hero {{ margin-top: 110px; height: 80vh; }}
+                .hero {{ margin-top: 200px; height: 80vh; }}
                 .hero h2 {{ font-size: 2em !important; padding: 0 15px; }}
                 .hero-clickable::after {{ content: ' ▶'; font-size: 0.5em; opacity: 0.8; vertical-align: middle; }}
                 
@@ -512,7 +512,7 @@ def join(request):
                 .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
                 .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
                 
-                .join-intro {{ margin-top: 110px; padding: 40px 15px; }}
+                .join-intro {{ margin-top: 200px; padding: 40px 15px; }}
                 .join-intro-container {{ grid-template-columns: 1fr; }}
                 .join-intro-image {{ order: -1; }}
                 .join-intro-title {{ font-size: 1.8em; }}
@@ -677,7 +677,7 @@ def about(request):
                 .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
                 .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
                 
-                .about-container {{ margin: 110px 15px 40px; padding: 20px; }}
+                .about-container {{ margin: 200px 15px 40px; padding: 20px; }}
                 h1.page-title {{ font-size: 1.8em; }}
                 .story-content p {{ font-size: 1em; text-align: left; }}
                 .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
@@ -912,7 +912,7 @@ def support(request):
                 .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
                 .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
                 
-                .support-hero {{ padding: 110px 15px 40px; }}
+                .support-hero {{ padding: 200px 15px 40px; }}
                 .support-hero h1 {{ font-size: 1.8em !important; }}
                 .support-hero p {{ font-size: 1em; }}
                 .support-container {{ padding: 0 15px; margin-top: -20px; }}
