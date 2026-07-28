@@ -255,7 +255,7 @@ def home(request):
                 
                 .hero {{ margin-top: 200px; height: 80vh; }}
                 .hero h2 {{ font-size: 2em !important; padding: 0 15px; }}
-                .hero-clickable::after {{ content: ' ▶'; font-size: 0.5em; opacity: 0.8; vertical-align: middle; }}
+                /* .hero-clickable::after {{ content: ' ▶'; font-size: 0.5em; opacity: 0.8; vertical-align: middle; }} */
                 
                 .container {{ padding: 40px 15px; margin-top: 0; }}
                 h2.section-title {{ font-size: 1.6em; margin-top: 20px; }}
