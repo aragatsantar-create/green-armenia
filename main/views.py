@@ -1110,9 +1110,8 @@ def map_page(request):
     footer_html = get_footer_html(lang)
 
     import json
-    import math
     
-    # Правильные координаты из GeoJSON (широта, долгота)
+    # Правильные координаты из GeoJSON
     stages = [
         {
             'name': "1-й этап",
@@ -1120,7 +1119,6 @@ def map_page(request):
             'status': 'planted',
             'polygons': [
                 [
-                    [40.60851566889554, 43.95913580526462],
                     [40.60851566889554, 43.95913580526462],
                     [40.60850190471825, 43.95917428776418],
                     [40.6074388, 43.9586374],
@@ -1142,22 +1140,6 @@ def map_page(request):
             'status': 'planned',
             'polygons': [
                 [
-                    [40.60851566889554, 43.95913580526462],
-                    [40.60851566889554, 43.95913580526462],
-                    [40.60850190471825, 43.95917428776418],
-                    [40.6074388, 43.9586374],
-                    [40.6075567, 43.9582244],
-                    [40.6075301, 43.9576642],
-                    [40.6077029, 43.956859],
-                    [40.608456, 43.9571391],
-                    [40.6086825, 43.9572659],
-                    [40.6087591, 43.9574971],
-                    [40.6094534, 43.9576214],
-                    [40.6088197, 43.9583672],
-                    [40.60851566889554, 43.95913580526462]
-                ],
-                [
-                    [40.60744650324921, 43.958700165936285],
                     [40.60744650324921, 43.958700165936285],
                     [40.6084657, 43.9592305],
                     [40.6080714, 43.9603704],
@@ -1180,38 +1162,6 @@ def map_page(request):
             'status': 'planned',
             'polygons': [
                 [
-                    [40.60851566889554, 43.95913580526462],
-                    [40.60851566889554, 43.95913580526462],
-                    [40.60850190471825, 43.95917428776418],
-                    [40.6074388, 43.9586374],
-                    [40.6075567, 43.9582244],
-                    [40.6075301, 43.9576642],
-                    [40.6077029, 43.956859],
-                    [40.608456, 43.9571391],
-                    [40.6086825, 43.9572659],
-                    [40.6087591, 43.9574971],
-                    [40.6094534, 43.9576214],
-                    [40.6088197, 43.9583672],
-                    [40.60851566889554, 43.95913580526462]
-                ],
-                [
-                    [40.60744650324921, 43.958700165936285],
-                    [40.60744650324921, 43.958700165936285],
-                    [40.6084657, 43.9592305],
-                    [40.6080714, 43.9603704],
-                    [40.6079294, 43.9602043],
-                    [40.6076935, 43.9606951],
-                    [40.6072564, 43.960346],
-                    [40.6067027, 43.9614683],
-                    [40.6062853, 43.9626769],
-                    [40.6061554, 43.9625989],
-                    [40.6061197, 43.9625416],
-                    [40.6064874, 43.9611672],
-                    [40.606848, 43.9600605],
-                    [40.60744650324921, 43.958700165936285]
-                ],
-                [
-                    [40.6073058, 43.9586939],
                     [40.6073058, 43.9586939],
                     [40.6070393, 43.95848],
                     [40.6054053, 43.9625384],
@@ -1226,39 +1176,6 @@ def map_page(request):
             ]
         }
     ]
-
-    # Рассчитываем площадь каждого этапа в гектарах
-    def calculate_area_hectares(polygon_coords):
-        """Рассчитывает площадь полигона в гектарах"""
-        n = len(polygon_coords)
-        if n < 3:
-            return 0
-        
-        # Среднее значение широты для расчета
-        avg_lat = sum(coord[0] for coord in polygon_coords) / n
-        
-        # Конвертация градусов в метры
-        lat_to_m = 111320  # 1 градус широты ≈ 111.32 км
-        lon_to_m = 111320 * math.cos(math.radians(avg_lat))  # 1 градус долготы зависит от широты
-        
-        # Формула Shoelace (Гаусса) для площади
-        area_m2 = 0
-        for i in range(n):
-            j = (i + 1) % n
-            area_m2 += polygon_coords[i][1] * lon_to_m * polygon_coords[j][0] * lat_to_m
-            area_m2 -= polygon_coords[j][1] * lon_to_m * polygon_coords[i][0] * lat_to_m
-        
-        area_m2 = abs(area_m2) / 2
-        area_hectares = area_m2 / 10000  # 1 гектар = 10000 м²
-        
-        return round(area_hectares, 2)
-
-    # Добавляем информацию о гектарах и деревьях для каждого этапа
-    for stage in stages:
-        total_area = sum(calculate_area_hectares(polygon) for polygon in stage['polygons'])
-        stage['hectares'] = total_area
-        # Рассчитываем количество деревьев из расчета 4500 деревьев на гектар
-        stage['trees'] = int(total_area * 4500)
 
     stages_json_str = json.dumps(stages, ensure_ascii=False)
 
@@ -1428,43 +1345,69 @@ def map_page(request):
 
             var stages = {stages_json_str};
 
-            // Цвета для каждого этапа (по индексу)
+            // Цвета для каждого этапа
             var stageColors = [
-                {{ color: '#2ecc71', borderColor: '#27ae60' }},  // 1-й этап - зеленый
-                {{ color: '#f39c12', borderColor: '#e67e22' }},  // 2-й этап - оранжевый
-                {{ color: '#e74c3c', borderColor: '#c0392b' }}   // 3-й этап - красный
+                {{ fill: '#2ecc71', border: '#27ae60' }},  // 1-й этап - зеленый
+                {{ fill: '#f39c12', border: '#e67e22' }},  // 2-й этап - оранжевый
+                {{ fill: '#e74c3c', border: '#c0392b' }}   // 3-й этап - красный
             ];
 
             var totalPlantedTrees = 0;
 
+            // Функция расчета площади полигона в гектарах
+            function calculateArea(polygonCoords) {{
+                var n = polygonCoords.length;
+                if (n < 3) return 0;
+                
+                var avgLat = 0;
+                for (var i = 0; i < n; i++) {{
+                    avgLat += polygonCoords[i][0];
+                }}
+                avgLat = avgLat / n;
+                
+                var latToM = 111320;
+                var lonToM = 111320 * Math.cos(avgLat * Math.PI / 180);
+                
+                var areaM2 = 0;
+                for (var i = 0; i < n; i++) {{
+                    var j = (i + 1) % n;
+                    areaM2 += polygonCoords[i][1] * lonToM * polygonCoords[j][0] * latToM;
+                    areaM2 -= polygonCoords[j][1] * lonToM * polygonCoords[i][0] * latToM;
+                }}
+                
+                areaM2 = Math.abs(areaM2) / 2;
+                return (areaM2 / 10000).toFixed(2);
+            }}
+
             stages.forEach(function(stage, index) {{
                 var isPlanted = stage.status === 'planted';
-                var colors = stageColors[index];  // Используем индекс массива
+                var colors = stageColors[index];
 
-                if (isPlanted) {{
-                    totalPlantedTrees += stage.trees;
-                }}
-
-                // Создаем полигоны для каждого этапа
                 stage.polygons.forEach(function(polygonCoords) {{
+                    var area = calculateArea(polygonCoords);
+                    var trees = Math.round(area * 4500);
+
+                    if (isPlanted) {{
+                        totalPlantedTrees += trees;
+                    }}
+
                     var polygon = L.polygon(polygonCoords, {{
-                        color: colors.borderColor,
+                        color: colors.border,
                         weight: 3,
-                        fillColor: colors.color,
+                        fillColor: colors.fill,
                         fillOpacity: 0.5
                     }}).addTo(map);
 
-                    // Popup с информацией (без года)
                     var statusText = isPlanted ? '✅ Озеленен' : ' Планируется';
-                    var treesInfo = stage.trees > 0 ? `<p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{stage.trees.toLocaleString()}}</p>` : '';
+                    var treesInfo = trees > 0 ? `<p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{trees.toLocaleString()}}</p>` : '';
                     
                     var popupContent = `
                         <div style="min-width: 220px;">
                             <h3 style="margin: 0 0 10px 0; color: #0F7874;">${{stage.name}}</h3>
-                            <p style="margin: 5px 0;"><strong>Площадь:</strong> ${{stage.hectares}} га</p>
+                            <p style="margin: 5px 0;"><strong>Площадь:</strong> ${{area}} га</p>
                             ${{treesInfo}}
                             <p style="margin: 5px 0;">${{stage.description}}</p>
-                            <p style="margin: 10px 0 0 0; color: ${{colors.color}}; font-weight: bold;">
+                            <p style="margin: 10px 0 0 0; color: ${{colors.fill}}; font-weight: bold;">
                                 ${{statusText}}
                             </p>
                         </div>
@@ -1472,7 +1415,6 @@ def map_page(request):
 
                     polygon.bindPopup(popupContent);
 
-                    // Подсветка при наведении
                     polygon.on('mouseover', function(e) {{
                         this.setStyle({{ fillOpacity: 0.7, weight: 5 }});
                     }});
@@ -1482,7 +1424,6 @@ def map_page(request):
                 }});
             }});
 
-            // Автоматически подгоняем карту под все участки
             if (stages.length > 0) {{
                 var group = new L.featureGroup();
                 stages.forEach(function(stage) {{
@@ -1493,7 +1434,6 @@ def map_page(request):
                 map.fitBounds(group.getBounds(), {{ padding: [50, 50] }});
             }}
 
-            // Обновляем статистику
             document.getElementById('total-trees').textContent = totalPlantedTrees.toLocaleString();
         </script>
     </body>
