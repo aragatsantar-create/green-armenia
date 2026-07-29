@@ -726,13 +726,13 @@ def support(request):
     ICON_BTC = "https://cryptologos.cc/logos/bitcoin-btc-logo.png"
     ICON_ETH = "https://cryptologos.cc/logos/ethereum-eth-logo.png"
     
-    ADDR_USDT = "TYourUSDTAddressHere123456789"
-    ADDR_TON = "UQYourTONAddressHere123456789"
-    ADDR_BTC = "bc1qYourBTCAddressHere123456789"
-    ADDR_ETH = "0xYourETHAddressHere123456789"
+    ADDR_USDT = "TUhwBwMRKiWwsg9YvXCe5bTEgdpRj366Qg"
+    ADDR_TON = "UQCzOa29c8ycE6FP4Pf7nZ3vAX5cnyXt9lnmjcgttiG-ApoO"
+    ADDR_BTC = "bc1q85dfm6g2stmpesrzcn5mrvq8fhm20t28qau60d"
+    ADDR_ETH = "0x70C70e9D3a30E50A4075Dbc7575b5A5C6015b67a"
     
-    BANK_CARD_NUMBER = "0000 0000 0000 0000"
-    BANK_CARD_HOLDER = "ИМЯ ФАМИЛИЯ"
+    BANK_CARD_NUMBER = "4374 7201 0002 2469"
+    BANK_CARD_HOLDER = "ARAGATS ANTAR CHARITAB.NGO"
     # =========================================================
 
     t = {
@@ -1015,10 +1015,13 @@ def support(request):
                 <h2>{t['corporate_title']}</h2>
                 <p>{t['corporate_desc']}</p>
                 <div class="bank-details">
-                    <div><strong>{t['bank_name']}:</strong> AMERIBANK CJSC, Yerevan, Armenia</div>
-                    <div><strong>SWIFT:</strong> AIIBAM22</div>
-                    <div><strong>{t['account_name']}:</strong> Aragats Antar Charity Foundation</div>
-                    <div><strong>Account (USD):</strong> 1111111111111111 <em style="color: #999;">(замените на реальный)</em></div>
+                    <div><strong>{t['bank_name']}:</strong> UNIBANK O.J.S.C</div>
+                    <div><strong>SWIFT:</strong> UNIJAM22XXX</div>
+                    <div><strong>{t['account_name']}:</strong> ARAGATS ANTAR Charitable NGO </div>
+                    <div><strong>Account (USD):</strong> 24125016452202 <em style="color: #999;">(замените на реальный)
+                    <div><strong>Account (AMD):</strong> 24125016452200 </div>
+                    <div><strong>Account (RUB):</strong> 24125016452201</div>
+</em></div>
                 </div>
                 <a href="mailto:info@aragatsantar.am?subject=Корпоративное партнерство" class="btn-primary">{t['contact_for_corp']}</a>
             </div>
