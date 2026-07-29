@@ -729,10 +729,10 @@ def support(request):
     ICON_ETH = "https://cryptologos.cc/logos/ethereum-eth-logo.png"
     
     # 3. ВАШИ ПУБЛИЧНЫЕ АДРЕСА КОШЕЛЬКОВ (12 слов сюда НЕ ПИСАТЬ!)
-    ADDR_USDT = "TYourUSDTAddressHere123456789" # Должен начинаться на T
-    ADDR_TON = "UQYourTONAddressHere123456789"  # Должен начинаться на UQ или EQ
-    ADDR_BTC = "bc1qYourBTCAddressHere123456789" # Должен начинаться на bc1
-    ADDR_ETH = "0xYourETHAddressHere123456789"   # Должен начинаться на 0x
+    ADDR_USDT = "TUhwBwMRKiWwsg9YvXCe5bTEgdpRj366Qg" # Должен начинаться на T
+    ADDR_TON = "UQCzOa29c8ycE6FP4Pf7nZ3vAX5cnyXt9lnmjcgttiG-ApoO"  # Должен начинаться на UQ или EQ
+    ADDR_BTC = "bc1q85dfm6g2stmpesrzcn5mrvq8fhm20t28qau60d" # Должен начинаться на bc1
+    ADDR_ETH = "0x70C70e9D3a30E50A4075Dbc7575b5A5C6015b67a"   # Должен начинаться на 0x
     
     # 4. Данные банковской карты
     BANK_CARD_NUMBER = "4374 7201 0002 2469"
