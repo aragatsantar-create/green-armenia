@@ -713,6 +713,32 @@ def support(request):
         lang = 'ru'
     activate(lang)
 
+    # =========================================================
+    # НАСТРОЙКА ДОНАТОВ (ЗАПОЛНИТЕ ЭТИ ДАННЫЕ!)
+    # =========================================================
+    # 1. Пути к вашим QR-кодам (положите их в папку static/)
+    QR_USDT = "/static/qr_usdt.png"
+    QR_TON = "/static/qr_ton.png"
+    QR_BTC = "/static/qr_btc.png"
+    QR_ETH = "/static/qr_eth.png"
+    
+    # 2. Пути к иконкам монет (или используйте эмодзи/ссылки на CDN)
+    ICON_USDT = "https://cryptologos.cc/logos/tether-usdt-logo.png"
+    ICON_TON = "https://cryptologos.cc/logos/toncoin-ton-logo.png"
+    ICON_BTC = "https://cryptologos.cc/logos/bitcoin-btc-logo.png"
+    ICON_ETH = "https://cryptologos.cc/logos/ethereum-eth-logo.png"
+    
+    # 3. ВАШИ ПУБЛИЧНЫЕ АДРЕСА КОШЕЛЬКОВ (12 слов сюда НЕ ПИСАТЬ!)
+    ADDR_USDT = "TYourUSDTAddressHere123456789" # Должен начинаться на T
+    ADDR_TON = "UQYourTONAddressHere123456789"  # Должен начинаться на UQ или EQ
+    ADDR_BTC = "bc1qYourBTCAddressHere123456789" # Должен начинаться на bc1
+    ADDR_ETH = "0xYourETHAddressHere123456789"   # Должен начинаться на 0x
+    
+    # 4. Данные банковской карты
+    BANK_CARD_NUMBER = "0000 0000 0000 0000"
+    BANK_CARD_HOLDER = "ИМЯ ФАМИЛИЯ"
+    # =========================================================
+
     t = {
         'home': _("Главная"),
         'about': _("О нас"),
@@ -721,65 +747,83 @@ def support(request):
         'support': _("Поддержать"),
         'support_title': _("Поддержите восстановление лесов Армении"),
         'support_subtitle': _("Выберите удобный способ пожертвования. Все переводы безопасны и идут напрямую на посадку деревьев."),
-        'monthly': _("Ежемесячно"),
-        'onetime': _("Разово"),
-        'method_cards': _("Банковская карта"),
-        'method_cards_desc': _("Visa, Mastercard, Maestro из любой страны мира"),
-        'method_mir': _("Карта «Мир» / СБП"),
-        'method_mir_desc': _("Быстрый перевод из России через СБП или картой Мир"),
-        'method_idram': _("ArCa / Idram"),
-        'method_idram_desc': _("Армянские платежные системы"),
-        'method_crypto': _("Криптовалюта"),
-        'method_crypto_desc': _("USDT, Bitcoin, Ethereum — мгновенно и без комиссий"),
+        'copy_address': _("Копировать адрес"),
+        'copied': _("Скопировано!"),
+        'scan_qr': _("Отсканируйте QR-код"),
+        'bank_transfer': _("Банковский перевод"),
+        'bank_transfer_desc': _("Прямой перевод на карту или расчетный счет"),
+        'crypto_title': _("Криптовалюта"),
+        'crypto_desc': _("Мгновенные переводы без посредников"),
         'corporate_title': _("Корпоративным партнерам"),
-        'corporate_desc': _("Для крупных пожертвований и партнерских программ используйте банковский перевод или свяжитесь с нами."),
+        'corporate_desc': _("Для крупных пожертвований используйте банковский перевод по реквизитам."),
         'bank_name': _("Банк получателя"),
         'account_name': _("Получатель"),
-        'swift': _("SWIFT код"),
         'contact_for_corp': _("Связаться для партнерства"),
-        'coming_soon': _("Настраивается"),
-        'scan_qr': _("Отсканируйте QR-код"),
     }
 
     nav_links = get_nav_links(t['support'], t)
     lang_switcher = get_language_switcher(lang)
     footer_html = get_footer_html(lang)
 
-    donorbox_embed = """
-    <div class="payment-placeholder">
-        <div class="placeholder-icon">💳</div>
-        <h3>Онлайн-оплата картой</h3>
-        <p>Visa, Mastercard из любой страны</p>
-        <div class="status-badge">🔜 Настраивается</div>
-        <p style="font-size: 0.9em; color: #666; margin-top: 15px;">
-            Скоро здесь будет форма для безопасной оплаты
-        </p>
-    </div>
-    """
+    # Генерация карточек криптовалют
+    crypto_methods = [
+        {
+            'name': 'USDT (TRC20)',
+            'desc': 'Рекомендуем: низкие комиссии',
+            'icon': ICON_USDT,
+            'qr': QR_USDT,
+            'address': ADDR_USDT,
+            'color': '#26a17b'
+        },
+        {
+            'name': 'TON',
+            'desc': 'Удобно из Telegram',
+            'icon': ICON_TON,
+            'qr': QR_TON,
+            'address': ADDR_TON,
+            'color': '#0088cc'
+        },
+        {
+            'name': 'Bitcoin (BTC)',
+            'desc': 'Классика, надежно',
+            'icon': ICON_BTC,
+            'qr': QR_BTC,
+            'address': ADDR_BTC,
+            'color': '#f7931a'
+        },
+        {
+            'name': 'Ethereum (ETH)',
+            'desc': 'Популярная сеть',
+            'icon': ICON_ETH,
+            'qr': QR_ETH,
+            'address': ADDR_ETH,
+            'color': '#627eea'
+        }
+    ]
 
-    qr_sbp = """
-    <div class="qr-placeholder">
-        <div class="qr-icon">📱</div>
-        <p>QR для СБП</p>
-        <div class="status-badge small">Скоро</div>
-    </div>
-    """
-    
-    qr_idram = """
-    <div class="qr-placeholder">
-        <div class="qr-icon">🇦🇲</div>
-        <p>QR для Idram</p>
-        <div class="status-badge small">Скоро</div>
-    </div>
-    """
-    
-    qr_crypto = """
-    <div class="qr-placeholder">
-        <div class="qr-icon"></div>
-        <p>USDT / BTC</p>
-        <div class="status-badge small">Скоро</div>
-    </div>
-    """
+    crypto_cards_html = ""
+    for crypto in crypto_methods:
+        crypto_cards_html += f"""
+        <div class="payment-card crypto-card">
+            <div class="crypto-header">
+                <img src="{crypto['icon']}" alt="{crypto['name']}" class="crypto-icon-img">
+                <div>
+                    <h3>{crypto['name']}</h3>
+                    <p>{crypto['desc']}</p>
+                </div>
+            </div>
+            <div class="qr-container">
+                <img src="{crypto['qr']}" alt="QR {crypto['name']}" class="qr-image">
+                <span class="qr-hint">{t['scan_qr']}</span>
+            </div>
+            <div class="address-box">
+                <code id="addr-{crypto['name'].replace(' ', '')}">{crypto['address']}</code>
+                <button class="copy-btn" onclick="copyToClipboard('addr-{crypto['name'].replace(' ', '')}', this)">
+                    📋 {t['copy_address']}
+                </button>
+            </div
+        </div>
+        """
 
     html = f"""
     <!DOCTYPE html>
@@ -814,9 +858,11 @@ def support(request):
 
             .support-container {{ max-width: 1100px; margin: -40px auto 60px; padding: 0 20px; position: relative; z-index: 10; }}
             
+            .section-title {{ text-align: center; color: var(--brand); font-size: 1.8em; margin: 40px 0 25px; font-weight: 700; }}
+            
             .payment-methods {{
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
                 gap: 25px;
                 margin-bottom: 60px;
             }}
@@ -828,43 +874,48 @@ def support(request):
                 box-shadow: 0 10px 30px rgba(0,0,0,0.08);
                 border: 2px solid transparent;
                 transition: all 0.3s ease;
+            }}
+            .payment-card:hover {{ border-color: var(--brand); transform: translateY(-5px); }}
+            
+            .bank-card-highlight {{
+                grid-column: 1 / -1;
+                background: linear-gradient(135deg, var(--brand) 0%, #0a5c59 100%);
+                color: white;
                 text-align: center;
             }}
-            
-            .payment-card:hover {{
-                border-color: var(--brand);
-                transform: translateY(-5px);
-                box-shadow: 0 15px 40px rgba(15, 120, 116, 0.15);
+            .bank-card-highlight h3 {{ color: white; font-size: 1.5em; }}
+            .bank-card-highlight p {{ color: rgba(255,255,255,0.9); }}
+            .bank-number {{ 
+                font-family: 'Courier New', monospace; font-size: 2em; font-weight: bold; 
+                letter-spacing: 2px; background: rgba(255,255,255,0.15); padding: 20px; 
+                border-radius: 12px; margin: 20px 0; word-break: break-all;
             }}
+            .bank-holder {{ font-size: 1.1em; opacity: 0.9; margin-bottom: 20px; }}
             
-            .payment-card.featured {{
-                border-color: var(--brand);
-                background: linear-gradient(135deg, #E0F2F1 0%, white 100%);
+            .crypto-header {{ display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }}
+            .crypto-icon-img {{ width: 50px; height: 50px; object-fit: contain; }}
+            .crypto-header h3 {{ margin: 0; font-size: 1.3em; color: #333; }}
+            .crypto-header p {{ margin: 5px 0 0; color: #666; font-size: 0.9em; }}
+            
+            .qr-container {{ text-align: center; margin: 20px 0; }}
+            .qr-image {{ width: 180px; height: 180px; border: 3px solid var(--brand); border-radius: 12px; padding: 10px; background: white; }}
+            .qr-hint {{ display: block; margin-top: 10px; color: #888; font-size: 0.9em; }}
+            
+            .address-box {{ 
+                display: flex; gap: 10px; background: #F4F8F8; border: 1px solid #E0F2F1; 
+                border-radius: 8px; padding: 12px; align-items: center;
             }}
-            
-            .payment-icon {{ font-size: 3em; margin-bottom: 15px; }}
-            .payment-card h3 {{ color: var(--brand); margin: 0 0 10px; font-size: 1.3em; }}
-            .payment-card p {{ color: #666; font-size: 0.95em; margin: 0 0 20px; }}
-            
-            .status-badge {{
-                display: inline-block;
-                background: #FFF3CD;
-                color: #856404;
-                padding: 6px 15px;
-                border-radius: 20px;
-                font-size: 0.85em;
-                font-weight: 600;
+            .address-box code {{ 
+                flex: 1; font-family: 'Courier New', monospace; font-size: 0.85em; 
+                color: #333; word-break: break-all; background: transparent; border: none;
             }}
-            .status-badge.small {{ padding: 4px 10px; font-size: 0.8em; }}
-            
-            .qr-placeholder {{
-                width: 180px; height: 180px; background: #F5F5F5; border: 2px dashed #ccc;
-                border-radius: 12px; margin: 0 auto 15px; display: flex; flex-direction: column;
-                align-items: center; justify-content: center; color: #999;
+            .copy-btn {{
+                background: var(--brand); color: white; border: none; padding: 10px 15px;
+                border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;
+                transition: background 0.3s; white-space: nowrap;
             }}
-            .qr-icon {{ font-size: 3em; margin-bottom: 10px; }}
-            .payment-placeholder {{ padding: 40px 20px; text-align: center; }}
-            .placeholder-icon {{ font-size: 4em; margin-bottom: 15px; }}
+            .copy-btn:hover {{ background: #0a5c59; }}
+            .copy-btn.copied {{ background: #28a745; }}
             
             .corporate-section {{
                 background: white; border-radius: 16px; padding: 40px;
@@ -901,7 +952,6 @@ def support(request):
             .social-link:hover {{ background: var(--brand); transform: translateY(-3px); }}
             .footer-bottom {{ max-width: 1200px; margin: 0 auto; padding: 25px 0; text-align: center; color: #777; font-size: 0.9em; }}
 
-            /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{
                 .main-header {{ padding: 10px 0; }}
                 .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
@@ -911,12 +961,13 @@ def support(request):
                 nav a {{ font-size: 0.85em; padding: 5px 8px; text-align: center; white-space: nowrap; }}
                 .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
                 .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
-                
                 .support-hero {{ padding: 200px 15px 40px; }}
                 .support-hero h1 {{ font-size: 1.8em !important; }}
-                .support-hero p {{ font-size: 1em; }}
                 .support-container {{ padding: 0 15px; margin-top: -20px; }}
                 .payment-methods {{ grid-template-columns: 1fr; }}
+                .bank-number {{ font-size: 1.2em; letter-spacing: 1px; }}
+                .address-box {{ flex-direction: column; align-items: stretch; }}
+                .copy-btn {{ width: 100%; text-align: center; }}
                 .corporate-section {{ padding: 25px 20px; }}
                 .bank-details strong {{ display: block; min-width: auto; margin-bottom: 5px; }}
                 .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
@@ -938,34 +989,22 @@ def support(request):
         </div>
 
         <div class="support-container">
+            <h2 class="section-title">{t['bank_transfer']}</h2>
             <div class="payment-methods">
-                <div class="payment-card featured">
-                    <div class="payment-icon">💳</div>
-                    <h3>{t['method_cards']}</h3>
-                    <p>{t['method_cards_desc']}</p>
-                    {donorbox_embed}
+                <div class="payment-card bank-card-highlight">
+                    <h3>💳 {t['bank_transfer']}</h3>
+                    <p>{t['bank_transfer_desc']}</p>
+                    <div class="bank-number" id="bankCard">{BANK_CARD_NUMBER}</div>
+                    <div class="bank-holder">{BANK_CARD_HOLDER}</div>
+                    <button class="copy-btn" style="background: white; color: var(--brand);" onclick="copyToClipboard('bankCard', this)">
+                        📋 {t['copy_address']}
+                    </button>
                 </div>
-                <div class="payment-card">
-                    <div class="payment-icon">🇷</div>
-                    <h3>{t['method_mir']}</h3>
-                    <p>{t['method_mir_desc']}</p>
-                    {qr_sbp}
-                    <div class="status-badge">🔜 {t['coming_soon']}</div>
-                </div>
-                <div class="payment-card">
-                    <div class="payment-icon">🇦🇲</div>
-                    <h3>{t['method_idram']}</h3>
-                    <p>{t['method_idram_desc']}</p>
-                    {qr_idram}
-                    <div class="status-badge">🔜 {t['coming_soon']}</div>
-                </div>
-                <div class="payment-card">
-                    <div class="payment-icon"></div>
-                    <h3>{t['method_crypto']}</h3>
-                    <p>{t['method_crypto_desc']}</p>
-                    {qr_crypto}
-                    <div class="status-badge">🔜 {t['coming_soon']}</div>
-                </div>
+            </div>
+
+            <h2 class="section-title">{t['crypto_title']}</h2>
+            <div class="payment-methods">
+                {crypto_cards_html}
             </div>
 
             <div class="corporate-section">
@@ -976,21 +1015,42 @@ def support(request):
                     <div><strong>SWIFT:</strong> AIIBAM22</div>
                     <div><strong>{t['account_name']}:</strong> Aragats Antar Charity Foundation</div>
                     <div><strong>Account (USD):</strong> 1111111111111111 <em style="color: #999;">(замените на реальный)</em></div>
-                    <div><strong>Account (AMD):</strong> 2222222222222222 <em style="color: #999;">(замените на реальный)</em></div>
-                    <div><strong>Account (RUB):</strong> 3333333333333333 <em style="color: #999;">(замените на реальный)</em></div>
                 </div>
                 <a href="mailto:info@aragatsantar.am?subject=Корпоративное партнерство" class="btn-primary">{t['contact_for_corp']}</a>
             </div>
         </div>
 
         {footer_html}
+        
+        <script>
+            function copyToClipboard(elementId, btnElement) {{
+                const text = document.getElementById(elementId).innerText.replace(/\\s+/g, ' ').trim();
+                navigator.clipboard.writeText(text).then(() => {{
+                    const originalText = btnElement.innerHTML;
+                    btnElement.innerHTML = '✅ {t['copied']}';
+                    btnElement.classList.add('copied');
+                    setTimeout(() => {{
+                        btnElement.innerHTML = originalText;
+                        btnElement.classList.remove('copied');
+                    }}, 2000);
+                }}).catch(err => {{
+                    // Fallback для старых браузеров
+                    const textArea = document.createElement("textarea");
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(textArea);
+                    alert("{t['copied']}");
+                }});
+            }}
+        </script>
     </body>
     </html>
     """
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
-
 
 # =========================================================
 # ВРЕМЕННАЯ ФУНКЦИЯ ДЛЯ ИМПОРТА ДАННЫХ (УДАЛИТЬ ПОСЛЕ ИСПОЛЬЗОВАНИЯ)
