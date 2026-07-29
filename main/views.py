@@ -1112,11 +1112,10 @@ def map_page(request):
     import json
     import math
     
+    # Правильные координаты из GeoJSON (широта, долгота)
     stages = [
         {
             'name': "1-й этап",
-            'year': 2023,
-            'trees': 4690,
             'description': "Уже посаженный участок леса",
             'status': 'planted',
             'polygons': [
@@ -1139,8 +1138,6 @@ def map_page(request):
         },
         {
             'name': "2-й этап",
-            'year': 2024,
-            'trees': 0,
             'description': "Второй этап озеленения",
             'status': 'planned',
             'polygons': [
@@ -1179,8 +1176,6 @@ def map_page(request):
         },
         {
             'name': "3-й этап",
-            'year': 2025,
-            'trees': 0,
             'description': "Третий этап озеленения",
             'status': 'planned',
             'polygons': [
@@ -1258,13 +1253,12 @@ def map_page(request):
         
         return round(area_hectares, 2)
 
-    # Добавляем информацию о гектарах для каждого этапа
+    # Добавляем информацию о гектарах и деревьях для каждого этапа
     for stage in stages:
         total_area = sum(calculate_area_hectares(polygon) for polygon in stage['polygons'])
         stage['hectares'] = total_area
         # Рассчитываем количество деревьев из расчета 4500 деревьев на гектар
-        if stage['status'] == 'planted':
-            stage['trees'] = int(total_area * 4500)
+        stage['trees'] = int(total_area * 4500)
 
     stages_json_str = json.dumps(stages, ensure_ascii=False)
 
@@ -1390,7 +1384,7 @@ def map_page(request):
         <div class="map-container">
             <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-number" id="total-trees">4690</div>
+                    <div class="stat-number" id="total-trees">0</div>
                     <div class="stat-label">Деревьев посажено</div>
                 </div>
             </div>
@@ -1441,9 +1435,15 @@ def map_page(request):
                 {{ color: '#e74c3c', borderColor: '#c0392b' }}   // 3-й этап - красный
             ];
 
+            var totalPlantedTrees = 0;
+
             stages.forEach(function(stage, index) {{
                 var isPlanted = stage.status === 'planted';
                 var colors = stageColors[index];  // Используем индекс массива
+
+                if (isPlanted) {{
+                    totalPlantedTrees += stage.trees;
+                }}
 
                 // Создаем полигоны для каждого этапа
                 stage.polygons.forEach(function(polygonCoords) {{
@@ -1454,14 +1454,13 @@ def map_page(request):
                         fillOpacity: 0.5
                     }}).addTo(map);
 
-                    // Popup с информацией
-                    var statusText = isPlanted ? '✅ Озеленен' : '⏳ Планируется';
+                    // Popup с информацией (без года)
+                    var statusText = isPlanted ? '✅ Озеленен' : ' Планируется';
                     var treesInfo = stage.trees > 0 ? `<p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{stage.trees.toLocaleString()}}</p>` : '';
                     
                     var popupContent = `
                         <div style="min-width: 220px;">
                             <h3 style="margin: 0 0 10px 0; color: #0F7874;">${{stage.name}}</h3>
-                            <p style="margin: 5px 0;"><strong>Год:</strong> ${{stage.year}}</p>
                             <p style="margin: 5px 0;"><strong>Площадь:</strong> ${{stage.hectares}} га</p>
                             ${{treesInfo}}
                             <p style="margin: 5px 0;">${{stage.description}}</p>
@@ -1493,6 +1492,9 @@ def map_page(request):
                 }});
                 map.fitBounds(group.getBounds(), {{ padding: [50, 50] }});
             }}
+
+            // Обновляем статистику
+            document.getElementById('total-trees').textContent = totalPlantedTrees.toLocaleString();
         </script>
     </body>
     </html>
