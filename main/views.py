@@ -34,7 +34,6 @@ def get_nav_links(current_page, t):
         (t['home'], "/"),
         (t['about'], "/about/"),
         (t['projects'], "/#projects"),
-        (t['support'], "/support/"),
         (t['join'], "/join/"),
     ]
     nav_html = ""
@@ -296,8 +295,6 @@ def home(request):
             <h2 class="section-title" style="margin-top: 80px;">{t['how_to_help']}</h2>
             <p style="font-size: 1.2em; text-align: center; max-width: 700px; margin: 0 auto 40px;">{t['support_message']}</p>
             <div class="btn-group">
-                <a href="/support/" class="btn btn-primary">{t['support_project']}</a>
-                <span class="btn-divider"></span>
                 <a href="/join/" class="btn btn-secondary">{t['join_us']}</a>
             </div>
         </div>
