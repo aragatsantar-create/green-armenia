@@ -1385,7 +1385,7 @@ def map_page(request):
 
                 stage.polygons.forEach(function(polygonCoords) {{
                     var area = calculateArea(polygonCoords);
-                    var trees = Math.round(area * 4500);
+                    var trees = Math.round(area * 2000);
 
                     if (isPlanted) {{
                         totalPlantedTrees += trees;
