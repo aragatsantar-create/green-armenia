@@ -1110,12 +1110,13 @@ def map_page(request):
     footer_html = get_footer_html(lang)
 
     import json
+    import math
     
     stages = [
         {
             'name': "1-й этап",
             'year': 2023,
-            'trees': 1000,
+            'trees': 4690,
             'description': "Уже посаженный участок леса",
             'status': 'planted',
             'polygons': [
@@ -1231,6 +1232,40 @@ def map_page(request):
         }
     ]
 
+    # Рассчитываем площадь каждого этапа в гектарах
+    def calculate_area_hectares(polygon_coords):
+        """Рассчитывает площадь полигона в гектарах"""
+        n = len(polygon_coords)
+        if n < 3:
+            return 0
+        
+        # Среднее значение широты для расчета
+        avg_lat = sum(coord[0] for coord in polygon_coords) / n
+        
+        # Конвертация градусов в метры
+        lat_to_m = 111320  # 1 градус широты ≈ 111.32 км
+        lon_to_m = 111320 * math.cos(math.radians(avg_lat))  # 1 градус долготы зависит от широты
+        
+        # Формула Shoelace (Гаусса) для площади
+        area_m2 = 0
+        for i in range(n):
+            j = (i + 1) % n
+            area_m2 += polygon_coords[i][1] * lon_to_m * polygon_coords[j][0] * lat_to_m
+            area_m2 -= polygon_coords[j][1] * lon_to_m * polygon_coords[i][0] * lat_to_m
+        
+        area_m2 = abs(area_m2) / 2
+        area_hectares = area_m2 / 10000  # 1 гектар = 10000 м²
+        
+        return round(area_hectares, 2)
+
+    # Добавляем информацию о гектарах для каждого этапа
+    for stage in stages:
+        total_area = sum(calculate_area_hectares(polygon) for polygon in stage['polygons'])
+        stage['hectares'] = total_area
+        # Рассчитываем количество деревьев из расчета 4500 деревьев на гектар
+        if stage['status'] == 'planted':
+            stage['trees'] = int(total_area * 4500)
+
     stages_json_str = json.dumps(stages, ensure_ascii=False)
 
     html = f"""
@@ -1289,9 +1324,9 @@ def map_page(request):
 
             .stats {{
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 20px;
-                margin-top: 30px;
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 30px auto;
             }}
             .stat-card {{
                 background: white;
@@ -1355,15 +1390,7 @@ def map_page(request):
         <div class="map-container">
             <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-number" id="total-stages">0</div>
-                    <div class="stat-label">Этапов всего</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="planted-stages">0</div>
-                    <div class="stat-label">Озеленено</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="total-trees">0</div>
+                    <div class="stat-number" id="total-trees">4690</div>
                     <div class="stat-label">Деревьев посажено</div>
                 </div>
             </div>
@@ -1397,10 +1424,8 @@ def map_page(request):
 
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script>
-            // Карта с более светлым стилем
             var map = L.map('map').setView([40.605, 43.963], 14);
 
-            // Используем CartoDB Positron (светлая минималистичная карта)
             L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 subdomains: 'abcd',
@@ -1408,29 +1433,17 @@ def map_page(request):
             }}).addTo(map);
 
             var stages = {stages_json_str};
-            var totalStages = stages.length;
-            var plantedStages = 0;
-            var totalTrees = 0;
 
-            // Цвета для каждого этапа
-            var stageColors = {{
-                '1-й': {{ color: '#2ecc71', borderColor: '#27ae60' }},
-                '2-й': {{ color: '#f39c12', borderColor: '#e67e22' }},
-                '3-й': {{ color: '#e74c3c', borderColor: '#c0392b' }}
-            }};
+            // Цвета для каждого этапа (по индексу)
+            var stageColors = [
+                {{ color: '#2ecc71', borderColor: '#27ae60' }},  // 1-й этап - зеленый
+                {{ color: '#f39c12', borderColor: '#e67e22' }},  // 2-й этап - оранжевый
+                {{ color: '#e74c3c', borderColor: '#c0392b' }}   // 3-й этап - красный
+            ];
 
             stages.forEach(function(stage, index) {{
                 var isPlanted = stage.status === 'planted';
-                
-                // Определяем цвет по номеру этапа
-                var stageNum = stage.name.includes('1-й') ? '1-й' : 
-                               stage.name.includes('2-й') ? '2-й' : '3-й';
-                var colors = stageColors[stageNum];
-
-                if (isPlanted) {{
-                    plantedStages++;
-                    totalTrees += stage.trees;
-                }}
+                var colors = stageColors[index];  // Используем индекс массива
 
                 // Создаем полигоны для каждого этапа
                 stage.polygons.forEach(function(polygonCoords) {{
@@ -1443,11 +1456,14 @@ def map_page(request):
 
                     // Popup с информацией
                     var statusText = isPlanted ? '✅ Озеленен' : '⏳ Планируется';
+                    var treesInfo = stage.trees > 0 ? `<p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{stage.trees.toLocaleString()}}</p>` : '';
+                    
                     var popupContent = `
-                        <div style="min-width: 200px;">
+                        <div style="min-width: 220px;">
                             <h3 style="margin: 0 0 10px 0; color: #0F7874;">${{stage.name}}</h3>
                             <p style="margin: 5px 0;"><strong>Год:</strong> ${{stage.year}}</p>
-                            <p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{stage.trees}}</p>
+                            <p style="margin: 5px 0;"><strong>Площадь:</strong> ${{stage.hectares}} га</p>
+                            ${{treesInfo}}
                             <p style="margin: 5px 0;">${{stage.description}}</p>
                             <p style="margin: 10px 0 0 0; color: ${{colors.color}}; font-weight: bold;">
                                 ${{statusText}}
@@ -1477,11 +1493,6 @@ def map_page(request):
                 }});
                 map.fitBounds(group.getBounds(), {{ padding: [50, 50] }});
             }}
-
-            // Обновляем статистику
-            document.getElementById('total-stages').textContent = totalStages;
-            document.getElementById('planted-stages').textContent = plantedStages;
-            document.getElementById('total-trees').textContent = totalTrees;
         </script>
     </body>
     </html>
