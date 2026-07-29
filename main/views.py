@@ -153,6 +153,7 @@ def home(request):
     <!DOCTYPE html>
     <html lang="{lang}">
     <head>
+        <link rel="icon" type="image/png" href="/static/logo1.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{BRAND_NAME}</title>
