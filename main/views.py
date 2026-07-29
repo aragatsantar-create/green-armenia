@@ -716,27 +716,23 @@ def support(request):
     # =========================================================
     # НАСТРОЙКА ДОНАТОВ (ЗАПОЛНИТЕ ЭТИ ДАННЫЕ!)
     # =========================================================
-    # 1. Пути к вашим QR-кодам (положите их в папку static/)
     QR_USDT = "/static/qr_usdt.png"
     QR_TON = "/static/qr_ton.png"
     QR_BTC = "/static/qr_btc.png"
     QR_ETH = "/static/qr_eth.png"
     
-    # 2. Пути к иконкам монет (или используйте эмодзи/ссылки на CDN)
     ICON_USDT = "https://cryptologos.cc/logos/tether-usdt-logo.png"
     ICON_TON = "https://cryptologos.cc/logos/toncoin-ton-logo.png"
     ICON_BTC = "https://cryptologos.cc/logos/bitcoin-btc-logo.png"
     ICON_ETH = "https://cryptologos.cc/logos/ethereum-eth-logo.png"
     
-    # 3. ВАШИ ПУБЛИЧНЫЕ АДРЕСА КОШЕЛЬКОВ (12 слов сюда НЕ ПИСАТЬ!)
-    ADDR_USDT = "TUhwBwMRKiWwsg9YvXCe5bTEgdpRj366Qg" # Должен начинаться на T
-    ADDR_TON = "UQCzOa29c8ycE6FP4Pf7nZ3vAX5cnyXt9lnmjcgttiG-ApoO"  # Должен начинаться на UQ или EQ
-    ADDR_BTC = "bc1q85dfm6g2stmpesrzcn5mrvq8fhm20t28qau60d" # Должен начинаться на bc1
-    ADDR_ETH = "0x70C70e9D3a30E50A4075Dbc7575b5A5C6015b67a"   # Должен начинаться на 0x
+    ADDR_USDT = "TYourUSDTAddressHere123456789"
+    ADDR_TON = "UQYourTONAddressHere123456789"
+    ADDR_BTC = "bc1qYourBTCAddressHere123456789"
+    ADDR_ETH = "0xYourETHAddressHere123456789"
     
-    # 4. Данные банковской карты
-    BANK_CARD_NUMBER = "4374 7201 0002 2469"
-    BANK_CARD_HOLDER = "ARAGATS ANTAR CHARITAB.NGO"
+    BANK_CARD_NUMBER = "0000 0000 0000 0000"
+    BANK_CARD_HOLDER = "ИМЯ ФАМИЛИЯ"
     # =========================================================
 
     t = {
@@ -759,41 +755,49 @@ def support(request):
         'bank_name': _("Банк получателя"),
         'account_name': _("Получатель"),
         'contact_for_corp': _("Связаться для партнерства"),
+        # Названия криптовалют
+        'usdt_name': _("USDT (TRC20)"),
+        'usdt_desc': _("Рекомендуем: низкие комиссии"),
+        'ton_name': _("TON"),
+        'ton_desc': _("Удобно из Telegram"),
+        'btc_name': _("Bitcoin (BTC)"),
+        'btc_desc': _("Классика, надежно"),
+        'eth_name': _("Ethereum (ETH)"),
+        'eth_desc': _("Популярная сеть"),
     }
 
     nav_links = get_nav_links(t['support'], t)
     lang_switcher = get_language_switcher(lang)
     footer_html = get_footer_html(lang)
 
-    # Генерация карточек криптовалют
     crypto_methods = [
         {
-            'name': 'USDT (TRC20)',
-            'desc': 'Рекомендуем: низкие комиссии',
+            'name': t['usdt_name'],
+            'desc': t['usdt_desc'],
             'icon': ICON_USDT,
             'qr': QR_USDT,
             'address': ADDR_USDT,
             'color': '#26a17b'
         },
         {
-            'name': 'TON',
-            'desc': 'Удобно из Telegram',
+            'name': t['ton_name'],
+            'desc': t['ton_desc'],
             'icon': ICON_TON,
             'qr': QR_TON,
             'address': ADDR_TON,
             'color': '#0088cc'
         },
         {
-            'name': 'Bitcoin (BTC)',
-            'desc': 'Классика, надежно',
+            'name': t['btc_name'],
+            'desc': t['btc_desc'],
             'icon': ICON_BTC,
             'qr': QR_BTC,
             'address': ADDR_BTC,
             'color': '#f7931a'
         },
         {
-            'name': 'Ethereum (ETH)',
-            'desc': 'Популярная сеть',
+            'name': t['eth_name'],
+            'desc': t['eth_desc'],
             'icon': ICON_ETH,
             'qr': QR_ETH,
             'address': ADDR_ETH,
@@ -821,7 +825,7 @@ def support(request):
                 <button class="copy-btn" onclick="copyToClipboard('addr-{crypto['name'].replace(' ', '')}', this)">
                     📋 {t['copy_address']}
                 </button>
-            </div
+            </div>
         </div>
         """
 
@@ -997,7 +1001,7 @@ def support(request):
                     <div class="bank-number" id="bankCard">{BANK_CARD_NUMBER}</div>
                     <div class="bank-holder">{BANK_CARD_HOLDER}</div>
                     <button class="copy-btn" style="background: white; color: var(--brand);" onclick="copyToClipboard('bankCard', this)">
-                        📋 {t['copy_address']}
+                         {t['copy_address']}
                     </button>
                 </div>
             </div>
@@ -1034,7 +1038,6 @@ def support(request):
                         btnElement.classList.remove('copied');
                     }}, 2000);
                 }}).catch(err => {{
-                    // Fallback для старых браузеров
                     const textArea = document.createElement("textarea");
                     textArea.value = text;
                     document.body.appendChild(textArea);
@@ -1051,7 +1054,6 @@ def support(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
-
 # =========================================================
 # ВРЕМЕННАЯ ФУНКЦИЯ ДЛЯ ИМПОРТА ДАННЫХ (УДАЛИТЬ ПОСЛЕ ИСПОЛЬЗОВАНИЯ)
 # =========================================================

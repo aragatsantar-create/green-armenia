@@ -197,3 +197,69 @@ msgstr "Support"
 
 msgid "Навигация"
 msgstr "Navigation"
+
+msgid "Поддержите восстановление лесов Армении"
+msgstr "Support the restoration of Armenia's forests"
+
+msgid "Выберите удобный способ пожертвования. Все переводы безопасны и идут напрямую на посадку деревьев."
+msgstr "Choose a convenient donation method. All transfers are secure and go directly to tree planting."
+
+msgid "Копировать адрес"
+msgstr "Copy address"
+
+msgid "Скопировано!"
+msgstr "Copied!"
+
+msgid "Отсканируйте QR-код"
+msgstr "Scan QR code"
+
+msgid "Банковский перевод"
+msgstr "Bank transfer"
+
+msgid "Прямой перевод на карту или расчетный счет"
+msgstr "Direct transfer to card or bank account"
+
+msgid "Криптовалюта"
+msgstr "Cryptocurrency"
+
+msgid "Мгновенные переводы без посредников"
+msgstr "Instant transfers without intermediaries"
+
+msgid "Корпоративным партнерам"
+msgstr "For corporate partners"
+
+msgid "Для крупных пожертвований используйте банковский перевод по реквизитам."
+msgstr "For large donations, use bank transfer via details."
+
+msgid "Банк получателя"
+msgstr "Recipient bank"
+
+msgid "Получатель"
+msgstr "Recipient"
+
+msgid "Связаться для партнерства"
+msgstr "Contact for partnership"
+
+msgid "USDT (TRC20)"
+msgstr "USDT (TRC20)"
+
+msgid "Рекомендуем: низкие комиссии"
+msgstr "Recommended: low fees"
+
+msgid "TON"
+msgstr "TON"
+
+msgid "Удобно из Telegram"
+msgstr "Convenient from Telegram"
+
+msgid "Bitcoin (BTC)"
+msgstr "Bitcoin (BTC)"
+
+msgid "Классика, надежно"
+msgstr "Classic, reliable"
+
+msgid "Ethereum (ETH)"
+msgstr "Ethereum (ETH)"
+
+msgid "Популярная сеть"
+msgstr "Popular network"
