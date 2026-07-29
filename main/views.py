@@ -1111,12 +1111,14 @@ def map_page(request):
 
     import json
     
-    # Правильные координаты из GeoJSON
+    # ПРАВИЛЬНЫЕ координаты из GeoJSON [широта, долгота]
+    # Для 1-го этапа добавлено фиксированное количество деревьев: 4690
     stages = [
         {
             'name': "1-й этап",
             'description': "Уже посаженный участок леса",
             'status': 'planted',
+            'fixed_trees': 4690,  # Фиксированное количество деревьев
             'polygons': [
                 [
                     [40.60851566889554, 43.95913580526462],
@@ -1385,7 +1387,10 @@ def map_page(request):
 
                 stage.polygons.forEach(function(polygonCoords) {{
                     var area = calculateArea(polygonCoords);
-                    var trees = Math.round(area * 2000);
+                    
+                    // Если есть фиксированное количество деревьев - используем его
+                    // Иначе считаем по формуле: гектары × 2000
+                    var trees = stage.fixed_trees || Math.round(area * 2000);
 
                     if (isPlanted) {{
                         totalPlantedTrees += trees;
@@ -1398,7 +1403,7 @@ def map_page(request):
                         fillOpacity: 0.5
                     }}).addTo(map);
 
-                    var statusText = isPlanted ? '✅ Озеленен' : ' Планируется';
+                    var statusText = isPlanted ? '✅ Озеленен' : '⏳ Планируется';
                     var treesInfo = trees > 0 ? `<p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{trees.toLocaleString()}}</p>` : '';
                     
                     var popupContent = `
