@@ -1084,3 +1084,406 @@ def make_admin_now(request):
         User.objects.create_superuser('admin', 'admin@a.am', 'admin12345')
         return HttpResponse("<h1 style='color:green; text-align:center; margin-top:50px;'>✅ АДМИН СОЗДАН! Логин: admin, Пароль: admin12345</h1><p style='text-align:center;'><a href='/admin/'>Войти в админку</a></p>")
     return HttpResponse("<h1>Админ уже существует. <a href='/admin/'>Войти</a></h1>")
+
+def map_page(request):
+    lang = request.COOKIES.get('django_language', 'ru')
+    if lang not in ['ru', 'en', 'hy']:
+        lang = 'ru'
+    activate(lang)
+
+    t = {
+        'home': _("Главная"),
+        'about': _("О нас"),
+        'projects': _("Проекты"),
+        'join': _("Присоединяйтесь"),
+        'map': _("Карта"),
+        'map_title': _("Карта озеленения"),
+        'map_subtitle': _("Интерактивная карта этапов восстановления лесов вокруг горы Арагац"),
+        'back_home': _("Вернуться на главную"),
+    }
+
+    nav_links = get_nav_links(t['map'], t)
+    lang_switcher = get_language_switcher(lang)
+    footer_html = get_footer_html(lang)
+
+    # =========================================================
+    # ДАННЫЕ ЭТАПОВ ОЗЕЛЕНЕНИЯ
+    # =========================================================
+    import json
+    
+    stages = [
+        {
+            'name': "1-й этап (Озеленен)",
+            'year': 2023,
+            'trees': 1000,
+            'description': "Уже посаженный участок леса",
+            'status': 'planted',
+            'polygons': [
+                [
+                    [40.60851566889554, 43.95913580526462],
+                    [40.60851566889554, 43.95913580526462],
+                    [40.60850190471825, 43.95917428776418],
+                    [40.6074388, 43.9586374],
+                    [40.6075567, 43.9582244],
+                    [40.6075301, 43.9576642],
+                    [40.6077029, 43.956859],
+                    [40.608456, 43.9571391],
+                    [40.6086825, 43.9572659],
+                    [40.6087591, 43.9574971],
+                    [40.6094534, 43.9576214],
+                    [40.6088197, 43.9583672],
+                    [40.60851566889554, 43.95913580526462]
+                ]
+            ]
+        },
+        {
+            'name': "2-й этап (Планируется)",
+            'year': 2024,
+            'trees': 0,
+            'description': "Второй этап озеленения",
+            'status': 'planned',
+            'polygons': [
+                [
+                    [40.60851566889554, 43.95913580526462],
+                    [40.60851566889554, 43.95913580526462],
+                    [40.60850190471825, 43.95917428776418],
+                    [40.6074388, 43.9586374],
+                    [40.6075567, 43.9582244],
+                    [40.6075301, 43.9576642],
+                    [40.6077029, 43.956859],
+                    [40.608456, 43.9571391],
+                    [40.6086825, 43.9572659],
+                    [40.6087591, 43.9574971],
+                    [40.6094534, 43.9576214],
+                    [40.6088197, 43.9583672],
+                    [40.60851566889554, 43.95913580526462]
+                ],
+                [
+                    [40.60744650324921, 43.958700165936285],
+                    [40.60744650324921, 43.958700165936285],
+                    [40.6084657, 43.9592305],
+                    [40.6080714, 43.9603704],
+                    [40.6079294, 43.9602043],
+                    [40.6076935, 43.9606951],
+                    [40.6072564, 43.960346],
+                    [40.6067027, 43.9614683],
+                    [40.6062853, 43.9626769],
+                    [40.6061554, 43.9625989],
+                    [40.6061197, 43.9625416],
+                    [40.6064874, 43.9611672],
+                    [40.606848, 43.9600605],
+                    [40.60744650324921, 43.958700165936285]
+                ]
+            ]
+        },
+        {
+            'name': "3-й этап (Планируется)",
+            'year': 2025,
+            'trees': 0,
+            'description': "Третий этап озеленения",
+            'status': 'planned',
+            'polygons': [
+                [
+                    [40.60851566889554, 43.95913580526462],
+                    [40.60851566889554, 43.95913580526462],
+                    [40.60850190471825, 43.95917428776418],
+                    [40.6074388, 43.9586374],
+                    [40.6075567, 43.9582244],
+                    [40.6075301, 43.9576642],
+                    [40.6077029, 43.956859],
+                    [40.608456, 43.9571391],
+                    [40.6086825, 43.9572659],
+                    [40.6087591, 43.9574971],
+                    [40.6094534, 43.9576214],
+                    [40.6088197, 43.9583672],
+                    [40.60851566889554, 43.95913580526462]
+                ],
+                [
+                    [40.60744650324921, 43.958700165936285],
+                    [40.60744650324921, 43.958700165936285],
+                    [40.6084657, 43.9592305],
+                    [40.6080714, 43.9603704],
+                    [40.6079294, 43.9602043],
+                    [40.6076935, 43.9606951],
+                    [40.6072564, 43.960346],
+                    [40.6067027, 43.9614683],
+                    [40.6062853, 43.9626769],
+                    [40.6061554, 43.9625989],
+                    [40.6061197, 43.9625416],
+                    [40.6064874, 43.9611672],
+                    [40.606848, 43.9600605],
+                    [40.60744650324921, 43.958700165936285]
+                ],
+                [
+                    [40.6073058, 43.9586939],
+                    [40.6073058, 43.9586939],
+                    [40.6070393, 43.95848],
+                    [40.6054053, 43.9625384],
+                    [40.6045736, 43.9623741],
+                    [40.603672, 43.9637843],
+                    [40.6014827, 43.9674133],
+                    [40.6024745, 43.9687942],
+                    [40.6029645, 43.969303],
+                    [40.6045882, 43.9656928],
+                    [40.6073058, 43.9586939]
+                ]
+            ]
+        }
+    ]
+    # =========================================================
+
+    stages_json_str = json.dumps(stages, ensure_ascii=False)
+
+    html = f"""
+    <!DOCTYPE html>
+    <html lang="{lang}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{t['map_title']} - {BRAND_NAME}</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <style>
+            :root {{ --brand: {BRAND_COLOR}; }}
+            body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
+            .main-header {{ position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: white; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 15px 0; }}
+            .header-inner {{ max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }}
+            .logo-area {{ display: flex; align-items: center; gap: 20px; }}
+            .logo-link {{ text-decoration: none; display: inline-block; }}
+            .logo-img {{ height: 70px; width: auto; }}
+            nav {{ display: flex; align-items: center; gap: 20px; }}
+            nav a {{ color: #333; text-decoration: none; font-weight: 600; font-size: 1.05em; transition: color 0.2s; position: relative; }}
+            nav a:hover, nav a.active-link {{ color: var(--brand); }}
+            nav a.active-link::after {{ content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background-color: var(--brand); }}
+            .language-switcher {{ display: flex; gap: 5px; margin-left: 20px; padding-left: 20px; border-left: 1px solid rgba(0,0,0,0.1); }}
+            .lang-link {{ color: #333; text-decoration: none; font-size: 0.9em; font-weight: bold; padding: 5px 8px; border-radius: 5px; transition: background 0.3s; }}
+            .lang-link:hover, .lang-link.active {{ background: var(--brand); color: white !important; }}
+
+            .map-hero {{
+                background: linear-gradient(135deg, rgba(15, 120, 116, 0.9), rgba(15, 120, 116, 0.7)), url('/static/hero.jpg');
+                background-size: cover; background-position: center;
+                color: white; text-align: center; padding: 120px 20px 60px;
+            }}
+            .map-hero h1 {{ font-size: 2.8em; margin: 0 0 15px; font-weight: 800; }}
+            .map-hero p {{ font-size: 1.2em; max-width: 700px; margin: 0 auto; opacity: 0.9; }}
+
+            .map-container {{ max-width: 1200px; margin: -40px auto 60px; padding: 0 20px; position: relative; z-index: 10; }}
+            .map-wrapper {{
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }}
+            #map {{ height: 600px; width: 100%; }}
+
+            .legend {{
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                margin-top: 30px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            }}
+            .legend h3 {{ color: var(--brand); margin-top: 0; }}
+            .legend-item {{ display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }}
+            .legend-color {{ width: 30px; height: 20px; border-radius: 4px; opacity: 0.7; }}
+            .legend-color.planted {{ background: #2ecc71; border: 2px solid #27ae60; }}
+            .legend-color.planned {{ background: #f39c12; border: 2px solid #e67e22; }}
+            .legend-color.future {{ background: #e74c3c; border: 2px solid #c0392b; }}
+
+            .stats {{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }}
+            .stat-card {{
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            }}
+            .stat-number {{ font-size: 2.5em; font-weight: 800; color: var(--brand); }}
+            .stat-label {{ color: #666; font-size: 0.95em; margin-top: 5px; }}
+
+            .back-btn {{ display: inline-flex; align-items: center; margin-top: 30px; color: var(--brand); text-decoration: none; font-weight: bold; font-size: 1.1em; }}
+            .back-btn:hover {{ gap: 10px; }}
+            .back-btn span {{ margin-right: 8px; font-size: 1.2em; }}
+
+            .main-footer {{ background: #1a1a1a; color: #ccc; padding: 60px 20px 0; margin-top: 80px; }}
+            .footer-content {{ max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; padding-bottom: 40px; border-bottom: 1px solid #333; }}
+            .footer-col h3, .footer-col h4 {{ color: white; margin-top: 0; margin-bottom: 20px; }}
+            .footer-logo {{ font-size: 1.8em; color: var(--brand); font-weight: bold; }}
+            .footer-desc {{ font-size: 0.95em; line-height: 1.6; color: #aaa; }}
+            .footer-links a, .footer-contacts a {{ display: block; color: #ccc; text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }}
+            .footer-links a:hover, .footer-contacts a:hover {{ color: var(--brand); }}
+            .contact-item {{ display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #ccc; font-size: 0.95em; }}
+            .contact-item svg {{ color: var(--brand); flex-shrink: 0; }}
+            .contact-item a {{ color: #ccc; text-decoration: none; }}
+            .social-links {{ display: flex; gap: 12px; margin-top: 20px; }}
+            .social-link {{ display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #333; border-radius: 50%; color: white; transition: all 0.3s; }}
+            .social-link:hover {{ background: var(--brand); transform: translateY(-3px); }}
+            .footer-bottom {{ max-width: 1200px; margin: 0 auto; padding: 25px 0; text-align: center; color: #777; font-size: 0.9em; }}
+
+            @media (max-width: 768px) {{
+                .main-header {{ padding: 10px 0; }}
+                .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
+                .logo-area {{ width: 100%; justify-content: center; }}
+                .logo-img {{ height: 50px !important; }}
+                nav {{ flex-direction: row; flex-wrap: wrap; width: 100%; gap: 5px; justify-content: center; }}
+                nav a {{ font-size: 0.85em; padding: 5px 8px; text-align: center; white-space: nowrap; }}
+                .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
+                .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
+                .map-hero {{ padding: 200px 15px 40px; }}
+                .map-hero h1 {{ font-size: 1.8em !important; }}
+                .map-container {{ padding: 0 15px; margin-top: -20px; }}
+                #map {{ height: 400px; }}
+                .footer-content {{ grid-template-columns: 1fr; gap: 30px; text-align: center; }}
+                .social-links, .contact-item {{ justify-content: center; }}
+            }}
+        </style>
+    </head>
+    <body>
+        <header class="main-header">
+            <div class="header-inner">
+                <div class="logo-area"><a href="/" class="logo-link"><img src="/static/logo.png" alt="Logo" class="logo-img"></a></div>
+                <nav>{nav_links}{lang_switcher}</nav>
+            </div>
+        </header>
+
+        <div class="map-hero">
+            <h1>{t['map_title']}</h1>
+            <p>{t['map_subtitle']}</p>
+        </div>
+
+        <div class="map-container">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-stages">0</div>
+                    <div class="stat-label">Этапов всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="planted-stages">0</div>
+                    <div class="stat-label">Озеленено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-trees">0</div>
+                    <div class="stat-label">Деревьев посажено</div>
+                </div>
+            </div>
+
+            <div class="map-wrapper" style="margin-top: 30px;">
+                <div id="map"></div>
+            </div>
+
+            <div class="legend">
+                <h3>Условные обозначения</h3>
+                <div class="legend-item">
+                    <div class="legend-color planted"></div>
+                    <span>1-й этап — уже озеленен</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color planned"></div>
+                    <span>2-й этап — планируется</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color future"></div>
+                    <span>3-й этап — планируется</span>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="/" class="back-btn"><span>←</span> {t['back_home']}</a>
+            </div>
+        </div>
+
+        {footer_html}
+
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script>
+            var map = L.map('map').setView([40.605, 43.963], 14);
+
+            L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }}).addTo(map);
+
+            var stages = {stages_json_str};
+            var totalStages = stages.length;
+            var plantedStages = 0;
+            var totalTrees = 0;
+
+            stages.forEach(function(stage) {{
+                var isPlanted = stage.status === 'planted';
+                var color, borderColor;
+                
+                if (stage.name.includes('1-й')) {{
+                    color = '#2ecc71';
+                    borderColor = '#27ae60';
+                }} else if (stage.name.includes('2-й')) {{
+                    color = '#f39c12';
+                    borderColor = '#e67e22';
+                }} else {{
+                    color = '#e74c3c';
+                    borderColor = '#c0392b';
+                }}
+
+                if (isPlanted) {{
+                    plantedStages++;
+                    totalTrees += stage.trees;
+                }}
+
+                // Создаем полигоны для каждого этапа
+                stage.polygons.forEach(function(polygonCoords) {{
+                    var polygon = L.polygon(polygonCoords, {{
+                        color: borderColor,
+                        weight: 3,
+                        fillColor: color,
+                        fillOpacity: 0.4
+                    }}).addTo(map);
+
+                    // Popup с информацией
+                    var popupContent = `
+                        <div style="min-width: 220px;">
+                            <h3 style="margin: 0 0 10px 0; color: #0F7874;">${{stage.name}}</h3>
+                            <p style="margin: 5px 0;"><strong>Год:</strong> ${{stage.year}}</p>
+                            <p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{stage.trees}}</p>
+                            <p style="margin: 5px 0;">${{stage.description}}</p>
+                            <p style="margin: 10px 0 0 0; color: ${{color}}; font-weight: bold;">
+                                ${{isPlanted ? '✅ Озеленен' : ' Планируется'}}
+                            </p>
+                        </div>
+                    `;
+
+                    polygon.bindPopup(popupContent);
+
+                    // Подсветка при наведении
+                    polygon.on('mouseover', function(e) {{
+                        this.setStyle({{ fillOpacity: 0.7, weight: 5 }});
+                    }});
+                    polygon.on('mouseout', function(e) {{
+                        this.setStyle({{ fillOpacity: 0.4, weight: 3 }});
+                    }});
+                }});
+            }});
+
+            // Автоматически подгоняем карту под все участки
+            if (stages.length > 0) {{
+                var group = new L.featureGroup();
+                stages.forEach(function(stage) {{
+                    stage.polygons.forEach(function(coords) {{
+                        group.addLayer(L.polygon(coords));
+                    }});
+                }});
+                map.fitBounds(group.getBounds(), {{ padding: [50, 50] }});
+            }}
+
+            // Обновляем статистику
+            document.getElementById('total-stages').textContent = totalStages;
+            document.getElementById('planted-stages').textContent = plantedStages;
+            document.getElementById('total-trees').textContent = totalTrees;
+        </script>
+    </body>
+    </html>
+    """
+    response = HttpResponse(html)
+    response.set_cookie('django_language', lang, max_age=31536000)
+    return response
