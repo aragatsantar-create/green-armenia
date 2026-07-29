@@ -735,8 +735,8 @@ def support(request):
     ADDR_ETH = "0xYourETHAddressHere123456789"   # Должен начинаться на 0x
     
     # 4. Данные банковской карты
-    BANK_CARD_NUMBER = "0000 0000 0000 0000"
-    BANK_CARD_HOLDER = "ИМЯ ФАМИЛИЯ"
+    BANK_CARD_NUMBER = "4374 7201 0002 2469"
+    BANK_CARD_HOLDER = "ARAGATS ANTAR CHARITAB.NGO"
     # =========================================================
 
     t = {
