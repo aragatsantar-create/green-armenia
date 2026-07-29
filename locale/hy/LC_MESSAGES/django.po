@@ -262,3 +262,6 @@ msgstr "Ethereum (ETH)"
 
 msgid "Популярная сеть"
 msgstr "Հայտնի ցանց"
+
+msgid "Карта"
+msgstr "Քարտեզ"

@@ -263,3 +263,6 @@ msgstr "Ethereum (ETH)"
 
 msgid "Популярная сеть"
 msgstr "Popular network"
+
+msgid "Карта"
+msgstr "Map"

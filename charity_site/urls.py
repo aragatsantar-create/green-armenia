@@ -10,6 +10,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('join/', views.join, name='join'),
+    path('map/', views.map_page, name='map'),
     path('support/', views.support, name='support'),
     path('import-data/', views.import_data, name='import_data'),
     path('make-admin/', views.make_admin_now, name='make_admin'),
