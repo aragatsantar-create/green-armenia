@@ -1099,11 +1099,9 @@ def map_page(request):
         'home': _("Главная"),
         'about': _("О нас"),
         'projects': _("Проекты"),
-        'map': _("Карта"),
         'join': _("Присоединяйтесь"),
         'map': _("Карта"),
         'map_title': _("Карта озеленения"),
-        'map_subtitle': _("Интерактивная карта этапов восстановления лесов вокруг горы Арагац"),
         'back_home': _("Вернуться на главную"),
     }
 
@@ -1111,14 +1109,11 @@ def map_page(request):
     lang_switcher = get_language_switcher(lang)
     footer_html = get_footer_html(lang)
 
-    # =========================================================
-    # ДАННЫЕ ЭТАПОВ ОЗЕЛЕНЕНИЯ
-    # =========================================================
     import json
     
     stages = [
         {
-            'name': "1-й этап (Озеленен)",
+            'name': "1-й этап",
             'year': 2023,
             'trees': 1000,
             'description': "Уже посаженный участок леса",
@@ -1142,7 +1137,7 @@ def map_page(request):
             ]
         },
         {
-            'name': "2-й этап (Планируется)",
+            'name': "2-й этап",
             'year': 2024,
             'trees': 0,
             'description': "Второй этап озеленения",
@@ -1182,7 +1177,7 @@ def map_page(request):
             ]
         },
         {
-            'name': "3-й этап (Планируется)",
+            'name': "3-й этап",
             'year': 2025,
             'trees': 0,
             'description': "Третий этап озеленения",
@@ -1235,7 +1230,6 @@ def map_page(request):
             ]
         }
     ]
-    # =========================================================
 
     stages_json_str = json.dumps(stages, ensure_ascii=False)
 
@@ -1266,10 +1260,9 @@ def map_page(request):
             .map-hero {{
                 background: linear-gradient(135deg, rgba(15, 120, 116, 0.9), rgba(15, 120, 116, 0.7)), url('/static/hero.jpg');
                 background-size: cover; background-position: center;
-                color: white; text-align: center; padding: 120px 20px 60px;
+                color: white; text-align: center; padding: 80px 20px 40px;
             }}
-            .map-hero h1 {{ font-size: 2.8em; margin: 0 0 15px; font-weight: 800; }}
-            .map-hero p {{ font-size: 1.2em; max-width: 700px; margin: 0 auto; opacity: 0.9; }}
+            .map-hero h1 {{ font-size: 2.5em; margin: 0 0 15px; font-weight: 800; }}
 
             .map-container {{ max-width: 1200px; margin: -40px auto 60px; padding: 0 20px; position: relative; z-index: 10; }}
             .map-wrapper {{
@@ -1290,9 +1283,9 @@ def map_page(request):
             .legend h3 {{ color: var(--brand); margin-top: 0; }}
             .legend-item {{ display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }}
             .legend-color {{ width: 30px; height: 20px; border-radius: 4px; opacity: 0.7; }}
-            .legend-color.planted {{ background: #2ecc71; border: 2px solid #27ae60; }}
-            .legend-color.planned {{ background: #f39c12; border: 2px solid #e67e22; }}
-            .legend-color.future {{ background: #e74c3c; border: 2px solid #c0392b; }}
+            .legend-color.stage1 {{ background: #2ecc71; border: 2px solid #27ae60; }}
+            .legend-color.stage2 {{ background: #f39c12; border: 2px solid #e67e22; }}
+            .legend-color.stage3 {{ background: #e74c3c; border: 2px solid #c0392b; }}
 
             .stats {{
                 display: grid;
@@ -1338,7 +1331,7 @@ def map_page(request):
                 nav a {{ font-size: 0.85em; padding: 5px 8px; text-align: center; white-space: nowrap; }}
                 .language-switcher {{ margin-left: 0 !important; padding-left: 0 !important; border-left: none !important; justify-content: center; width: 100%; margin-top: 5px; gap: 5px; }}
                 .lang-link {{ font-size: 0.8em; padding: 4px 8px; }}
-                .map-hero {{ padding: 200px 15px 40px; }}
+                .map-hero {{ padding: 160px 15px 40px; }}
                 .map-hero h1 {{ font-size: 1.8em !important; }}
                 .map-container {{ padding: 0 15px; margin-top: -20px; }}
                 #map {{ height: 400px; }}
@@ -1357,7 +1350,6 @@ def map_page(request):
 
         <div class="map-hero">
             <h1>{t['map_title']}</h1>
-            <p>{t['map_subtitle']}</p>
         </div>
 
         <div class="map-container">
@@ -1383,15 +1375,15 @@ def map_page(request):
             <div class="legend">
                 <h3>Условные обозначения</h3>
                 <div class="legend-item">
-                    <div class="legend-color planted"></div>
+                    <div class="legend-color stage1"></div>
                     <span>1-й этап — уже озеленен</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color planned"></div>
+                    <div class="legend-color stage2"></div>
                     <span>2-й этап — планируется</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color future"></div>
+                    <div class="legend-color stage3"></div>
                     <span>3-й этап — планируется</span>
                 </div>
             </div>
@@ -1405,10 +1397,14 @@ def map_page(request):
 
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script>
+            // Карта с более светлым стилем
             var map = L.map('map').setView([40.605, 43.963], 14);
 
-            L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            // Используем CartoDB Positron (светлая минималистичная карта)
+            L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
             }}).addTo(map);
 
             var stages = {stages_json_str};
@@ -1416,20 +1412,20 @@ def map_page(request):
             var plantedStages = 0;
             var totalTrees = 0;
 
-            stages.forEach(function(stage) {{
+            // Цвета для каждого этапа
+            var stageColors = {{
+                '1-й': {{ color: '#2ecc71', borderColor: '#27ae60' }},
+                '2-й': {{ color: '#f39c12', borderColor: '#e67e22' }},
+                '3-й': {{ color: '#e74c3c', borderColor: '#c0392b' }}
+            }};
+
+            stages.forEach(function(stage, index) {{
                 var isPlanted = stage.status === 'planted';
-                var color, borderColor;
                 
-                if (stage.name.includes('1-й')) {{
-                    color = '#2ecc71';
-                    borderColor = '#27ae60';
-                }} else if (stage.name.includes('2-й')) {{
-                    color = '#f39c12';
-                    borderColor = '#e67e22';
-                }} else {{
-                    color = '#e74c3c';
-                    borderColor = '#c0392b';
-                }}
+                // Определяем цвет по номеру этапа
+                var stageNum = stage.name.includes('1-й') ? '1-й' : 
+                               stage.name.includes('2-й') ? '2-й' : '3-й';
+                var colors = stageColors[stageNum];
 
                 if (isPlanted) {{
                     plantedStages++;
@@ -1439,21 +1435,22 @@ def map_page(request):
                 // Создаем полигоны для каждого этапа
                 stage.polygons.forEach(function(polygonCoords) {{
                     var polygon = L.polygon(polygonCoords, {{
-                        color: borderColor,
+                        color: colors.borderColor,
                         weight: 3,
-                        fillColor: color,
-                        fillOpacity: 0.4
+                        fillColor: colors.color,
+                        fillOpacity: 0.5
                     }}).addTo(map);
 
                     // Popup с информацией
+                    var statusText = isPlanted ? '✅ Озеленен' : '⏳ Планируется';
                     var popupContent = `
-                        <div style="min-width: 220px;">
+                        <div style="min-width: 200px;">
                             <h3 style="margin: 0 0 10px 0; color: #0F7874;">${{stage.name}}</h3>
                             <p style="margin: 5px 0;"><strong>Год:</strong> ${{stage.year}}</p>
                             <p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{stage.trees}}</p>
                             <p style="margin: 5px 0;">${{stage.description}}</p>
-                            <p style="margin: 10px 0 0 0; color: ${{color}}; font-weight: bold;">
-                                ${{isPlanted ? '✅ Озеленен' : ' Планируется'}}
+                            <p style="margin: 10px 0 0 0; color: ${{colors.color}}; font-weight: bold;">
+                                ${{statusText}}
                             </p>
                         </div>
                     `;
@@ -1465,7 +1462,7 @@ def map_page(request):
                         this.setStyle({{ fillOpacity: 0.7, weight: 5 }});
                     }});
                     polygon.on('mouseout', function(e) {{
-                        this.setStyle({{ fillOpacity: 0.4, weight: 3 }});
+                        this.setStyle({{ fillOpacity: 0.5, weight: 3 }});
                     }});
                 }});
             }});
