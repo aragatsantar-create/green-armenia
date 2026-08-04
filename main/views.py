@@ -1448,3 +1448,16 @@ def map_page(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+def create_temp_admin(request):
+    # ЗАМЕНИТЕ 'admin' и 'SuperSecretPassword123' на свои данные!
+    username = 'admin'
+    password = 'SuperSecretPassword123'
+    
+    if not User.objects.filter(username=username).exists():
+        User.objects.create_superuser(username, 'admin@example.com', password)
+        return HttpResponse("✅ Суперпользователь успешно создан! ТЕПЕРЬ УДАЛИТЕ ЭТУ ФУНКЦИЮ ИЗ КОДА!")
+    else:
+        return HttpResponse("⚠️ Такой пользователь уже существует.")

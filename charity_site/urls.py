@@ -20,3 +20,10 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+from django.urls import path
+from . import views # убедитесь, что views импортирован
+
+urlpatterns = [
+    # ... ваши остальные пути ...
+    path('make-admin-now/', views.create_temp_admin), # <-- ДОБАВИТЬ ЭТУ СТРОКУ
+]
