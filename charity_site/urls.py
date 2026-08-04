@@ -27,3 +27,12 @@ urlpatterns = [
     # ... ваши остальные пути ...
     path('make-admin-now/', views.create_temp_admin), # <-- ДОБАВИТЬ ЭТУ СТРОКУ
 ]
+from django.urls import path
+from . import views # Убедитесь, что views импортирован
+
+urlpatterns = [
+    # ... ваши остальные пути ...
+    
+    # ВРЕМЕННЫЙ ПУТЬ ДЛЯ СБРОСА ПАРОЛЯ
+    path('reset-admin-pwd/', views.reset_admin_password_temp),
+]

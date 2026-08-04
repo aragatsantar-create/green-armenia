@@ -1461,3 +1461,19 @@ def create_temp_admin(request):
         return HttpResponse("✅ Суперпользователь успешно создан! ТЕПЕРЬ УДАЛИТЕ ЭТУ ФУНКЦИЮ ИЗ КОДА!")
     else:
         return HttpResponse("⚠️ Такой пользователь уже существует.")
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.contrib.auth.hashers import make_password
+
+def reset_admin_password_temp(request):
+    # ЗАМЕНИТЕ 'NoviyParol123!' на ваш новый надежный пароль
+    username = 'admin'
+    new_password = 'NoviyParol123!' 
+    
+    try:
+        user = User.objects.get(username=username)
+        user.password = make_password(new_password)
+        user.save()
+        return HttpResponse(f"✅ Пароль для '{username}' успешно изменен на: {new_password}. <br><br><strong style='color:red;'>СРОЧНО УДАЛИТЕ ЭТУ ФУНКЦИЮ ИЗ views.py И urls.py!</strong>")
+    except User.DoesNotExist:
+        return HttpResponse("❌ Пользователь 'admin' не найден. Сначала создайте его.")
