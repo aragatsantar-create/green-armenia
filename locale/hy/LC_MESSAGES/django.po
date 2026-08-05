@@ -161,7 +161,7 @@ msgstr "Միանալ"
 
 #: .\main\views.py:331
 msgid "Присоединяйтесь к нам!"
-msgstr "իացեք մեզ!"
+msgstr "Միացեք մեզ!"
 
 #: .\main\views.py:332
 msgid ""
