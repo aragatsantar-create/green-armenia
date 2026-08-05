@@ -171,10 +171,6 @@ msgstr ""
 "Fill out the form below to become part of the Aragats Antar team and "
 "participate in creating a \"green shield\" around Aragats."
 
-#: .\main\views.py:333 .\main\views.py:636
-msgid "Вернуться на главную"
-msgstr "Back to Home"
-
 #: .\main\views.py:336
 msgid "Отправить заявку"
 msgstr "Submit application"
@@ -266,3 +262,47 @@ msgstr "Popular network"
 
 msgid "Карта"
 msgstr "Map"
+
+msgid "Карта озеленения"
+msgstr "Reforestation Map"
+
+msgid "Вернуться на главную"
+msgstr "Back to Home"
+
+msgid "Деревьев посажено"
+msgstr "Trees Planted"
+
+msgid "Этапов всего"
+msgstr "Total Stages"
+
+msgid "Озеленено"
+msgstr "Reforested"
+
+msgid "Условные обозначения"
+msgstr "Legend"
+
+msgid "1-й этап — уже озеленен"
+msgstr "Stage 1 — already reforested"
+
+msgid "2-й этап — планируется"
+msgstr "Stage 2 — planned"
+
+msgid "3-й этап — планируется"
+msgstr "Stage 3 — planned"
+
+msgid "Площадь:"
+msgstr "Area:"
+
+msgid "Деревьев:"
+msgstr "Trees:"
+
+msgid "✅ Озеленен"
+msgstr "✅ Reforested"
+
+msgid "⏳ Планируется"
+msgstr "⏳ Planned"
+
+msgid "га"
+msgstr "ha"
+
+

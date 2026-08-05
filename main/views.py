@@ -1104,6 +1104,16 @@ def map_page(request):
         'map': _("Карта"),
         'map_title': _("Карта озеленения"),
         'back_home': _("Вернуться на главную"),
+        'trees_planted': _("Деревьев посажено"),
+        'legend': _("Условные обозначения"),
+        'stage1_label': _("1-й этап — уже озеленен"),
+        'stage2_label': _("2-й этап — планируется"),
+        'stage3_label': _("3-й этап — планируется"),
+        'area_label': _("Площадь:"),
+        'trees_label': _("Деревьев:"),
+        'reforested': _("✅ Озеленен"),
+        'planned': _("⏳ Планируется"),
+        'hectares': _("га"),
     }
 
     nav_links = get_nav_links(t['map'], t)
@@ -1116,8 +1126,8 @@ def map_page(request):
     # Для 1-го этапа добавлено фиксированное количество деревьев: 4690
     stages = [
         {
-            'name': "1-й этап",
-            'description': "Уже посаженный участок леса",
+            'name': _("1-й этап"),
+            'description': _("Уже посаженный участок леса"),
             'status': 'planted',
             'fixed_trees': 4690,  # Фиксированное количество деревьев
             'polygons': [
@@ -1138,8 +1148,8 @@ def map_page(request):
             ]
         },
         {
-            'name': "2-й этап",
-            'description': "Второй этап озеленения",
+            'name': _("2-й этап"),
+            'description': _("Второй этап озеленения"),
             'status': 'planned',
             'polygons': [
                 [
@@ -1160,8 +1170,8 @@ def map_page(request):
             ]
         },
         {
-            'name': "3-й этап",
-            'description': "Третий этап озеленения",
+            'name': _("3-й этап"),
+            'description': _("Третий этап озеленения"),
             'status': 'planned',
             'polygons': [
                 [
@@ -1190,6 +1200,7 @@ def map_page(request):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{t['map_title']} - {BRAND_NAME}</title>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <link rel="icon" type="image/png" href="/static/logo.png">
         <style>
             :root {{ --brand: {BRAND_COLOR}; }}
             body {{ font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #FAFAFA; color: #333; line-height: 1.6; }}
@@ -1305,7 +1316,7 @@ def map_page(request):
             <div class="stats">
                 <div class="stat-card">
                     <div class="stat-number" id="total-trees">0</div>
-                    <div class="stat-label">Деревьев посажено</div>
+                    <div class="stat-label">{t['trees_planted']}</div>
                 </div>
             </div>
 
@@ -1314,18 +1325,18 @@ def map_page(request):
             </div>
 
             <div class="legend">
-                <h3>Условные обозначения</h3>
+                <h3>{t['legend']}</h3>
                 <div class="legend-item">
                     <div class="legend-color stage1"></div>
-                    <span>1-й этап — уже озеленен</span>
+                    <span>{t['stage1_label']}</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color stage2"></div>
-                    <span>2-й этап — планируется</span>
+                    <span>{t['stage2_label']}</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color stage3"></div>
-                    <span>3-й этап — планируется</span>
+                    <span>{t['stage3_label']}</span>
                 </div>
             </div>
 
@@ -1404,13 +1415,13 @@ def map_page(request):
                         fillOpacity: 0.5
                     }}).addTo(map);
 
-                    var statusText = isPlanted ? '✅ Озеленен' : '⏳ Планируется';
-                    var treesInfo = trees > 0 ? `<p style="margin: 5px 0;"><strong>Деревьев:</strong> ${{trees.toLocaleString()}}</p>` : '';
+                    var statusText = isPlanted ? '{t['reforested']}' : '{t['planned']}';
+                    var treesInfo = trees > 0 ? `<p style="margin: 5px 0;"><strong>{t['trees_label']}</strong> ${{trees.toLocaleString()}}</p>` : '';
                     
                     var popupContent = `
                         <div style="min-width: 220px;">
                             <h3 style="margin: 0 0 10px 0; color: #0F7874;">${{stage.name}}</h3>
-                            <p style="margin: 5px 0;"><strong>Площадь:</strong> ${{area}} га</p>
+                            <p style="margin: 5px 0;"><strong>{t['area_label']}</strong> ${{area}} {t['hectares']}</p>
                             ${{treesInfo}}
                             <p style="margin: 5px 0;">${{stage.description}}</p>
                             <p style="margin: 10px 0 0 0; color: ${{colors.fill}}; font-weight: bold;">
@@ -1448,9 +1459,6 @@ def map_page(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-
 def create_temp_admin(request):
     # ЗАМЕНИТЕ 'admin' и 'SuperSecretPassword123' на свои данные!
     username = 'admin'
