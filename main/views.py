@@ -1415,7 +1415,7 @@ def map_page(request):
                         fillOpacity: 0.5
                     }}).addTo(map);
 
-                    var statusText = isPlanted ? '{t['reforested']}' : '{t['planned']}';
+                    var statusText = isPlanted ? '" + t['reforested'] + "' : '" + t['planned'] + "';
                     var treesInfo = trees > 0 ? `<p style="margin: 5px 0;"><strong>{t['trees_label']}</strong> ${{trees.toLocaleString()}}</p>` : '';
                     
                     var popupContent = `
