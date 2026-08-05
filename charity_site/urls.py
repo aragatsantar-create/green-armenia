@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from main import views
+from main import views  # <-- Правильный импорт из приложения main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -14,25 +14,12 @@ urlpatterns = [
     path('support/', views.support, name='support'),
     path('import-data/', views.import_data, name='import_data'),
     path('make-admin/', views.make_admin_now, name='make_admin'),
+    
+    # ВРЕМЕННЫЙ ПУТЬ ДЛЯ СБРОСА ПАРОЛЯ (ОБЯЗАТЕЛЬНО УДАЛИТЬ ПОСЛЕ УСПЕШНОГО ВХОДА!)
+    path('reset-admin-pwd/', views.reset_admin_password_temp),
 ]
 
 # ВАЖНО: Эта строка должна быть в конце файла!
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
-from django.urls import path
-from main import views
-
-urlpatterns = [
-    # ... ваши остальные пути ...
-    path('make-admin-now/', views.create_temp_admin), # <-- ДОБАВИТЬ ЭТУ СТРОКУ
-]
-from django.urls import path
-from . import views # Убедитесь, что views импортирован
-
-urlpatterns = [
-    # ... ваши остальные пути ...
-    
-    # ВРЕМЕННЫЙ ПУТЬ ДЛЯ СБРОСА ПАРОЛЯ
-    path('reset-admin-pwd/', views.reset_admin_password_temp),
-]
