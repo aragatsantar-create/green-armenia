@@ -15,9 +15,7 @@ urlpatterns = [
     path('import-data/', views.import_data, name='import_data'),
     path('make-admin/', views.make_admin_now, name='make_admin'),
     
-    # ВРЕМЕННЫЙ ПУТЬ ДЛЯ СБРОСА ПАРОЛЯ (ОБЯЗАТЕЛЬНО УДАЛИТЬ ПОСЛЕ УСПЕШНОГО ВХОДА!)
-    path('reset-admin-pwd/', views.reset_admin_password_temp),
-]
+
 
 # ВАЖНО: Эта строка должна быть в конце файла!
 if settings.DEBUG:
