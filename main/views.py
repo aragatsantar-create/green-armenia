@@ -1122,14 +1122,12 @@ def map_page(request):
 
     import json
     
-    # ПРАВИЛЬНЫЕ координаты из GeoJSON [широта, долгота]
-    # Для 1-го этапа добавлено фиксированное количество деревьев: 4690
     stages = [
         {
             'name': _("1-й этап"),
             'description': _("Уже посаженный участок леса"),
             'status': 'planted',
-            'fixed_trees': 4690,  # Фиксированное количество деревьев
+            'fixed_trees': 4690,
             'polygons': [
                 [
                     [40.60851566889554, 43.95913580526462],
@@ -1191,6 +1189,15 @@ def map_page(request):
     ]
 
     stages_json_str = json.dumps(stages, ensure_ascii=False)
+
+    # Передаем переводы в JavaScript через data-атрибут
+    translations_json = json.dumps({
+        'reforested': str(t['reforested']),
+        'planned': str(t['planned']),
+        'area_label': str(t['area_label']),
+        'trees_label': str(t['trees_label']),
+        'hectares': str(t['hectares']),
+    }, ensure_ascii=False)
 
     html = f"""
     <!DOCTYPE html>
@@ -1349,6 +1356,9 @@ def map_page(request):
 
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script>
+            // Переводы из Django
+            var translations = {translations_json};
+
             var map = L.map('map').setView([40.605, 43.963], 14);
 
             L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
@@ -1359,16 +1369,14 @@ def map_page(request):
 
             var stages = {stages_json_str};
 
-            // Цвета для каждого этапа
             var stageColors = [
-                {{ fill: '#2ecc71', border: '#27ae60' }},  // 1-й этап - зеленый
-                {{ fill: '#f39c12', border: '#e67e22' }},  // 2-й этап - оранжевый
-                {{ fill: '#e74c3c', border: '#c0392b' }}   // 3-й этап - красный
+                {{ fill: '#2ecc71', border: '#27ae60' }},
+                {{ fill: '#f39c12', border: '#e67e22' }},
+                {{ fill: '#e74c3c', border: '#c0392b' }}
             ];
 
             var totalPlantedTrees = 0;
 
-            // Функция расчета площади полигона в гектарах
             function calculateArea(polygonCoords) {{
                 var n = polygonCoords.length;
                 if (n < 3) return 0;
@@ -1399,9 +1407,6 @@ def map_page(request):
 
                 stage.polygons.forEach(function(polygonCoords) {{
                     var area = calculateArea(polygonCoords);
-                    
-                    // Если есть фиксированное количество деревьев - используем его
-                    // Иначе считаем по формуле: гектары × 2000
                     var trees = stage.fixed_trees || Math.round(area * 2000);
 
                     if (isPlanted) {{
@@ -1415,20 +1420,16 @@ def map_page(request):
                         fillOpacity: 0.5
                     }}).addTo(map);
 
-                    var statusText = isPlanted ? '" + t['reforested'] + "' : '" + t['planned'] + "';
-                    var treesInfo = trees > 0 ? `<p style="margin: 5px 0;"><strong>{t['trees_label']}</strong> ${{trees.toLocaleString()}}</p>` : '';
+                    var statusText = isPlanted ? translations.reforested : translations.planned;
+                    var treesInfo = trees > 0 ? '<p style="margin: 5px 0;"><strong>' + translations.trees_label + '</strong> ' + trees.toLocaleString() + '</p>' : '';
                     
-                    var popupContent = `
-                        <div style="min-width: 220px;">
-                            <h3 style="margin: 0 0 10px 0; color: #0F7874;">${{stage.name}}</h3>
-                            <p style="margin: 5px 0;"><strong>{t['area_label']}</strong> ${{area}} {t['hectares']}</p>
-                            ${{treesInfo}}
-                            <p style="margin: 5px 0;">${{stage.description}}</p>
-                            <p style="margin: 10px 0 0 0; color: ${{colors.fill}}; font-weight: bold;">
-                                ${{statusText}}
-                            </p>
-                        </div>
-                    `;
+                    var popupContent = '<div style="min-width: 220px;">' +
+                        '<h3 style="margin: 0 0 10px 0; color: #0F7874;">' + stage.name + '</h3>' +
+                        '<p style="margin: 5px 0;"><strong>' + translations.area_label + '</strong> ' + area + ' ' + translations.hectares + '</p>' +
+                        treesInfo +
+                        '<p style="margin: 5px 0;">' + stage.description + '</p>' +
+                        '<p style="margin: 10px 0 0 0; color: ' + colors.fill + '; font-weight: bold;">' + statusText + '</p>' +
+                        '</div>';
 
                     polygon.bindPopup(popupContent);
 
@@ -1458,8 +1459,7 @@ def map_page(request):
     """
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
-    return response
-def create_temp_admin(request):
+    return responsedef create_temp_admin(request):
     # ЗАМЕНИТЕ 'admin' и 'SuperSecretPassword123' на свои данные!
     username = 'admin'
     password = 'SuperSecretPassword123'
