@@ -386,7 +386,7 @@ def home(request):
 
 def join(request):
     from .forms import VolunteerForm
-    from .models import PageContent  # ← ДОБАВЛЕНО
+    from .models import JoinPage  # <-- Импортируем новую модель
     from django.middleware.csrf import get_token
 
     lang = request.COOKIES.get('django_language', 'ru')
@@ -394,15 +394,34 @@ def join(request):
         lang = 'ru'
     activate(lang)
 
-    # ← ИЗМЕНЕНО: пытаемся получить заголовок и описание из админки
-    try:
-        content = PageContent.objects.get(page_slug='join', language=lang)
-        join_heading = content.title
-        join_description = content.subtitle
-    except PageContent.DoesNotExist:
-        join_heading = _("Присоединяйтесь к нам!")
-        join_description = _("Заполните форму ниже, чтобы стать частью команды Aragats Antar и принять участие в создании \"зеленого щита\" вокруг Арагаца")
-    # ← КОНЕЦ ИЗМЕНЕНИЙ
+    # Получаем данные из новой модели (берем первую и единственную запись)
+    join_page = JoinPage.objects.first()
+    
+    # Выбираем текст в зависимости от текущего языка
+    if lang == 'hy':
+        join_heading = join_page.title_hy if join_page else "Միացեք մեզ!"
+        join_description = join_page.subtitle_hy if join_page else "Լրացրեք ստորև բերված ձևը..."
+        join_text_1 = join_page.text_1_hy if join_page else ""
+        join_text_2 = join_page.text_2_hy if join_page else ""
+        join_text_3 = join_page.text_3_hy if join_page else ""
+        join_text_4 = join_page.text_4_hy if join_page else ""
+        join_text_5 = join_page.text_5_hy if join_page else ""
+    elif lang == 'en':
+        join_heading = join_page.title_en if join_page else "Join us!"
+        join_description = join_page.subtitle_en if join_page else "Fill out the form below..."
+        join_text_1 = join_page.text_1_en if join_page else ""
+        join_text_2 = join_page.text_2_en if join_page else ""
+        join_text_3 = join_page.text_3_en if join_page else ""
+        join_text_4 = join_page.text_4_en if join_page else ""
+        join_text_5 = join_page.text_5_en if join_page else ""
+    else:  # ru
+        join_heading = join_page.title_ru if join_page else "Присоединяйтесь к нам!"
+        join_description = join_page.subtitle_ru if join_page else "Заполните форму ниже..."
+        join_text_1 = join_page.text_1_ru if join_page else ""
+        join_text_2 = join_page.text_2_ru if join_page else ""
+        join_text_3 = join_page.text_3_ru if join_page else ""
+        join_text_4 = join_page.text_4_ru if join_page else ""
+        join_text_5 = join_page.text_5_ru if join_page else ""
 
     t = {
         'home': _("Главная"),
@@ -412,23 +431,19 @@ def join(request):
         'map': _("Карта"),
         'support': _("Поддержать"),
         'join_title': _("Присоединиться"),
-        'join_heading': join_heading,  # ← ИЗМЕНЕНО: теперь из базы
-        'join_description': join_description,  # ← ИЗМЕНЕНО: теперь из базы
+        'join_heading': join_heading,
+        'join_description': join_description,
         'back_home': _("Вернуться на главную"),
         'about_project': _("О проекте"),
         'contacts': _("Контакты"),
         'submit': _("Отправить заявку"),
         'success_message': _("Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время."),
         'who_we_need': _("Кто нам нужен"),
-                'join_text_1': _('«<strong>Aragats Antar</strong>»-ը պարզապես անտառների վերականգնման ծրագիր չէ։ Այն համախոհների համայնք է, որտեղ յուրաքանչյուրը կարող է գտնել իր տեղը և իրական ներդրում ունենալ Հայաստանի բնության և կլիմայի պահպանման գործում։'),
-        
-        'join_text_2': _('Մենք փնտրում ենք <strong>ագրոնոմների և դենդրոլոգների</strong>։ Մեզ անհրաժեշտ են <span class="brand-color"><strong>կամավոր-կանաչապատողներ</strong></span>, ովքեր պատրաստ են մասնակցել շաբաթօրյակներին, տնկել ծառեր և խնամել տնկիները։'),
-        
-        'join_text_3': _('Եթե դուք <span class="brand-color"><strong>SMM մասնագետ</strong></span> եք, մենք ձեզ կվստահենք սոցիալական ցանցերի վարումը և բովանդակության ստեղծումը։ <strong>Քոփիռայթերները</strong> կօգնեն մեզ գրել տեքստեր կայքի և ԶԼՄ-ների համար։ <span class="brand-color"><strong>Կոնտենտ ստեղծողները և լուսանկարիչները</strong></span> կնկարահանեն տեսանյութեր ու լուսանկարներ՝ ցուցադրելով Արագածի գեղեցկությունն ու անտառների վերականգնման ընթացքը։'),
-        
-        'join_text_4': _('Իսկ եթե ունեք այլ մասնագիտություններ՝ դիզայն, իրավաբանություն, հաշվապահություն, լոգիստիկա կամ այլ ոլորտներ, վստահ ենք՝ ձեր գիտելիքներն ու փորձը նույնպես կարող են կարևոր ներդրում ունենալ մեր առաքելության մեջ։'),
-        
-        'join_text_5': _('<strong>Ի՞նչ կստանաք դուք։</strong> Իրական փորձ, նոր ծանոթություններ, եզակի լուսանկարներ լեռների ֆոնին, պորտֆոլիոյի համալրում և գիտակցում, որ դուք ավելի լավն եք դարձնում աշխարհը։ Յուրաքանչյուր տնկած ծառը ձեր անձնական ներդրումն է Հայաստանի ապագայում։'),
+        'join_text_1': join_text_1,
+        'join_text_2': join_text_2,
+        'join_text_3': join_text_3,
+        'join_text_4': join_text_4,
+        'join_text_5': join_text_5,
     }
 
     nav_links = get_nav_links(t['join'], t)
@@ -445,6 +460,8 @@ def join(request):
             form = VolunteerForm()
     
     csrf_token = get_token(request)
+    
+    # HTML шаблон остался точно таким же, как у вас (с поддержкой .brand-color)
     html = f"""
     <!DOCTYPE html>
     <html lang="{lang}">

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, ProjectImage, Volunteer, AboutPage, ContactInfo, PageContent
+from .models import Project, ProjectImage, Volunteer, AboutPage, ContactInfo, JoinPage
 
 class ProjectImageInline(admin.TabularInline):
     model = ProjectImage
@@ -27,8 +27,17 @@ class AboutPageAdmin(admin.ModelAdmin):
 class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ['email', 'phone', 'address']
 
-@admin.register(PageContent)
-class PageContentAdmin(admin.ModelAdmin):
-    list_display = ['page_slug', 'language', 'title']
-    list_filter = ['language', 'page_slug']
-    search_fields = ['title', 'subtitle']
+# === РЕГИСТРАЦИЯ НОВОЙ МОДЕЛИ С УДОБНЫМИ ГРУППАМИ ===
+@admin.register(JoinPage)
+class JoinPageAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('🇷🇺 Русский язык', {
+            'fields': ('title_ru', 'subtitle_ru', 'text_1_ru', 'text_2_ru', 'text_3_ru', 'text_4_ru', 'text_5_ru'),
+        }),
+        ('🇬🇧 English', {
+            'fields': ('title_en', 'subtitle_en', 'text_1_en', 'text_2_en', 'text_3_en', 'text_4_en', 'text_5_en'),
+        }),
+        ('🇦🇲 Հայերեն (Армянский)', {
+            'fields': ('title_hy', 'subtitle_hy', 'text_1_hy', 'text_2_hy', 'text_3_hy', 'text_4_hy', 'text_5_hy'),
+        }),
+    )
