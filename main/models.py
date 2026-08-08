@@ -53,6 +53,7 @@ class AboutPage(models.Model):
 
     def __str__(self):
         return self.title
+
 class ContactInfo(models.Model):
     address = models.CharField("Адрес", max_length=300, blank=True)
     phone = models.CharField("Телефон", max_length=50, blank=True)
@@ -68,3 +69,17 @@ class ContactInfo(models.Model):
     
     def __str__(self):
         return "Контакты сайта"
+
+class PageContent(models.Model):
+    page_slug = models.SlugField(max_length=50, verbose_name="Идентификатор страницы (например, join)")
+    language = models.CharField(max_length=2, choices=[('ru', 'Русский'), ('en', 'English'), ('hy', 'Հայերեն')], verbose_name="Язык")
+    title = models.CharField(max_length=200, verbose_name="Заголовок страницы")
+    subtitle = models.TextField(blank=True, verbose_name="Подзаголовок / Описание")
+    
+    class Meta:
+        verbose_name = "Текст страницы"
+        verbose_name_plural = "Тексты страниц"
+        unique_together = ['page_slug', 'language']
+    
+    def __str__(self):
+        return f"{self.page_slug} ({self.language})"

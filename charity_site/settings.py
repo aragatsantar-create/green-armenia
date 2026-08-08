@@ -1,4 +1,3 @@
-
 """
 Django settings for charity_site project.
 """
@@ -40,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main', 
-
 ]
 
 MIDDLEWARE = [
@@ -75,14 +73,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'charity_site.wsgi.application'
 
-# Database (PostgreSQL)
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
-}
+# Database configuration
+# Если есть DATABASE_URL (на хостинге Render), используем PostgreSQL.
+# Если нет (локально на компьютере), используем SQLite.
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -112,14 +119,12 @@ LOCALE_PATHS = [
 STATIC_URL = '/static/'
 
 # Явно указываем на папку static в корне проекта. 
-# Это единственный источник файлов, конфликтов быть не может.
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Настройки Cloudinary
-import cloudinary
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),

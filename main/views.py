@@ -386,12 +386,23 @@ def home(request):
 
 def join(request):
     from .forms import VolunteerForm
+    from .models import PageContent  # ← ДОБАВЛЕНО
     from django.middleware.csrf import get_token
 
     lang = request.COOKIES.get('django_language', 'ru')
     if lang not in ['ru', 'en', 'hy']:
         lang = 'ru'
     activate(lang)
+
+    # ← ИЗМЕНЕНО: пытаемся получить заголовок и описание из админки
+    try:
+        content = PageContent.objects.get(page_slug='join', language=lang)
+        join_heading = content.title
+        join_description = content.subtitle
+    except PageContent.DoesNotExist:
+        join_heading = _("Присоединяйтесь к нам!")
+        join_description = _("Заполните форму ниже, чтобы стать частью команды Aragats Antar и принять участие в создании \"зеленого щита\" вокруг Арагаца")
+    # ← КОНЕЦ ИЗМЕНЕНИЙ
 
     t = {
         'home': _("Главная"),
@@ -401,8 +412,8 @@ def join(request):
         'map': _("Карта"),
         'support': _("Поддержать"),
         'join_title': _("Присоединиться"),
-        'join_heading': _("Присоединяйтесь к нам!"),
-        'join_description': _("Заполните форму ниже, чтобы стать частью команды Aragats Antar и принять участие в создании \"зеленого щита\" вокруг Арагаца"),
+        'join_heading': join_heading,  # ← ИЗМЕНЕНО: теперь из базы
+        'join_description': join_description,  # ← ИЗМЕНЕНО: теперь из базы
         'back_home': _("Вернуться на главную"),
         'about_project': _("О проекте"),
         'contacts': _("Контакты"),
@@ -437,6 +448,7 @@ def join(request):
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{t['join_title']} - {BRAND_NAME}</title>
+        <link rel="icon" type="image/png" href="/static/logo.png">
         <style>
             :root {{ --brand: {BRAND_COLOR}; }}
             html {{ scroll-behavior: smooth; }}
@@ -501,7 +513,6 @@ def join(request):
             .footer-bottom {{ max-width: 1200px; margin: 0 auto; padding: 25px 0; text-align: center; color: #777; font-size: 0.9em; }}
             .footer-bottom p {{ margin: 0; }}
 
-            /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
             @media (max-width: 768px) {{ 
                 .main-header {{ padding: 10px 0; }}
                 .header-inner {{ flex-direction: column; gap: 10px; padding: 10px 15px; }}
@@ -575,7 +586,6 @@ def join(request):
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
     return response
-
 
 def about(request):
     lang = request.COOKIES.get('django_language', 'ru')
@@ -1459,7 +1469,8 @@ def map_page(request):
     """
     response = HttpResponse(html)
     response.set_cookie('django_language', lang, max_age=31536000)
-    return responsedef create_temp_admin(request):
+    return response
+def create_temp_admin(request):
     # ЗАМЕНИТЕ 'admin' и 'SuperSecretPassword123' на свои данные!
     username = 'admin'
     password = 'SuperSecretPassword123'

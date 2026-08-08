@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, ProjectImage, Volunteer, AboutPage, ContactInfo
+from .models import Project, ProjectImage, Volunteer, AboutPage, ContactInfo, PageContent
 
 class ProjectImageInline(admin.TabularInline):
     model = ProjectImage
@@ -26,3 +26,9 @@ class AboutPageAdmin(admin.ModelAdmin):
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ['email', 'phone', 'address']
+
+@admin.register(PageContent)
+class PageContentAdmin(admin.ModelAdmin):
+    list_display = ['page_slug', 'language', 'title']
+    list_filter = ['language', 'page_slug']
+    search_fields = ['title', 'subtitle']
